@@ -1,0 +1,11 @@
+
+node_modules/
+.env
+.env.production
+
+dist/
+
+# IDE
+cursor/
+.vscode/
+.idea/
