@@ -1,557 +1,163 @@
+# WasteStream AI UI Build Prompt
 
+Create a polished, production-quality frontend for **WasteStream AI**, an AI marketplace for waste trading and recycling.
 
+## Objective
 
-https://lablab.ai/ai-hackathons/amd-developer/
+Build a complete UI flow in `@web` with the following pages:
 
-I want to participate in this hackathon, give me the steps and guidance to participate, and what exactly am I doing?
+- Home page
+- Login page
+- Signup page
+- Onboarding flow
+- Dashboard
 
-So you’ve decided to jump into a hackathon. Nice. Welcome to the chaos of “build something impressive in a few days while your brain melts.” Let’s make sure you don’t waste this.
+The UX must guide users from landing to authenticated onboarding, and only allow dashboard access after onboarding is complete.
 
-🧠 First — What this hackathon actually is
-The AMD Developer Hackathon is basically:
+## Product Context
 
-A ~1 week global online hackathon (May 4–10) 
+WasteStream AI helps waste providers and recyclers connect through AI-assisted waste classification, pricing, and matching.
 
-You build an AI product using AMD GPUs in the cloud 
+The product should feel practical, trustworthy, and startup-ready, not experimental.
 
-Focus is on:
+## Required Routes and Flow
 
-AI agents (automation, workflows)
+Implement and connect these routes (or equivalent route structure in the project):
 
-Fine-tuning models
+- `/` -> Home
+- `/login` -> Login
+- `/signup` -> Signup
+- `/onboarding` -> Role-specific onboarding
+- `/dashboard` -> Protected dashboard
 
-Multimodal AI (images, video, etc.) 
+User flow rules:
 
-You’re not writing essays. You’re building a working product.
+1. Unauthenticated user can access Home, Login, and Signup.
+2. Authentication is Google-only (no email/password form fields).
+3. After sign-in, user must complete onboarding before entering dashboard.
+4. If onboarding is incomplete and user tries to access dashboard, redirect to onboarding.
+5. If onboarding is complete, allow dashboard access.
 
-Think:
+## Page Requirements
 
-“Can I build something that actually does something useful or impressive with AI?”
+### 1) Home Page
 
-🧩 What YOU are expected to do
-You are expected to:
+Must include:
 
-Pick a problem
-Not “AI is cool” — actual problem:
+- A simple hero section with a clear primary CTA.
+- Bento-box style feature sections explaining what WasteStream AI does.
+- A simple footer.
 
-Students can’t study properly → AI tutor
+Suggested hero message direction:
 
-Waste management (your thing) → AI sorting/recycling assistant
+- "AI marketplace for waste providers and recyclers."
+- CTA examples: "Get Started", "Join as Recycler", "Join as Provider".
 
-Job search → AI job matching agent
+### 2) Login and Signup Pages
 
-Build an AI-powered solution
-Examples:
+Requirements:
 
-AI agent that completes tasks (using tools, APIs)
+- Clean, modern auth card layout.
+- Google Auth as the only authentication option.
+- No email input, no password input, no forgot-password flow.
+- Clear links between login and signup screens.
 
-Chatbot with memory + reasoning
+### 3) Onboarding (Mandatory Before Dashboard)
 
-Document analyzer (PDF → insights)
+Role selection is required:
 
-Multi-agent system (agents talking to each other)
+- Recycler
+- Waste Provider
 
-Use their stack
+Render role-specific forms after selection.
 
-AMD Developer Cloud (you get $100 credits) 
+#### Recycler Onboarding Fields
 
-Models like Llama, Mistral, etc.
+- Full name
+- Age
+- Location (use location REST API/source available in the project)
+- Recycling company/agency name
+- Recycling company website (optional)
+- Bio/description
+- Types of waste collected (multi-select): plastic, scrap, nylons
+- Profile picture upload
 
-Tools like LangChain / CrewAI / AutoGen 
+#### Waste Provider Onboarding Fields
 
-Ship something real
+- Full name
+- Age
+- Location
+- Types of waste likely to trade
+- Profile picture upload
+- Bio/description
 
-A working demo
+Validation expectations:
 
-UI (even basic)
+- Required fields must show clear error states.
+- Optional fields should be labeled optional.
+- Form submission should provide loading/success feedback.
 
-Hosted or runnable
+### 4) Dashboard
 
-Submit + pitch
+Requirements:
 
-Show what it does
+- Simple sidebar navigation layout.
+- Clean, modern content area with cards/sections.
+- Mobile-responsive behavior with usable navigation on small screens.
+- Empty states and placeholder sections are acceptable if backend data is not ready.
 
-Explain why it matters
+## Design System and Styling Constraints
 
-Bonus if it looks like a startup idea
+- Use **Bricolage Grotesque** as the primary font.
+- Use **shadcn/ui** components.
+- Use **lucide-react** for icons.
+- Apply a **bento-box visual pattern** across sections where appropriate.
+- Follow design direction from `@/public/design_references_samples`.
 
-🪜 Step-by-step: how to actually participate
-1. Register
-Go to the hackathon page and sign up.
+Design quality expectations:
 
-Then:
+- Consistent spacing scale and typography hierarchy.
+- Good contrast and accessible button/input states.
+- Reusable UI patterns across pages (cards, buttons, form fields, section headers).
 
-Join AMD AI Developer Program (this unlocks GPU credits) 
+## Responsiveness Requirements
 
-2. Decide: solo or team
-Solo = control, but slower
+Support at minimum:
 
-Team = faster, but chaos
+- Mobile (~320px and up)
+- Tablet
+- Desktop
 
-If you go team:
+Ensure:
 
-You → backend + architecture
+- Navigation remains usable on mobile.
+- Forms remain readable and easy to complete on small screens.
+- Bento sections stack gracefully on smaller breakpoints.
 
-Someone → frontend
+## Implementation Guidance
 
-Someone → AI/ML
+- Keep components modular and reusable.
+- Separate page-level layout components from shared UI components.
+- Keep auth state and onboarding completion checks centralized.
+- Use route guards/middleware/layout checks so dashboard protection is enforced consistently.
 
-3. Pick a track (don’t overthink this)
-Main ones:
+## Acceptance Criteria
 
-AI Agents (recommended for you)
+The task is complete only if all conditions below are satisfied:
 
-Build systems that think + act
+1. Home page includes hero, bento feature sections, and footer.
+2. Login and signup pages are Google-auth only (no email/password fields).
+3. Onboarding supports role selection and role-specific fields exactly as defined.
+4. Dashboard cannot be accessed without completed onboarding.
+5. Dashboard uses a sidebar layout and is mobile responsive.
+6. Bricolage Grotesque, shadcn/ui, and lucide-react are used in the implementation.
+7. Styling reflects bento-inspired design and references from `@/public/design_references_samples`.
+8. UI is coherent, modern, and consistent across all pages.
 
-Fine-tuning (advanced)
+## Deliverable
 
-Train models
+Return:
 
-Multimodal
-
-Vision/audio stuff
-
-If you’re not already deep in ML, pick AI agents.
-
-4. Set up your stack (day 1 mistake most people make)
-Do NOT start coding blindly.
-
-Do this:
-
-Spin up AMD cloud GPU
-
-Deploy a model (using vLLM or similar)
-
-Get a working API endpoint
-
-You can literally get a model running in ~30 mins 
-
-If you skip this, you’ll waste 2 days crying over setup.
-
-5. Build your core feature (the only thing that matters)
-Forget fancy UI.
-
-Focus on:
-
-“Does this actually work?”
-
-Example structure:
-
-Input → user request
-
-AI → processes it
-
-Tools → APIs / logic
-
-Output → result
-
-That’s your core loop.
-
-6. Add minimal UI
-Next.js (you already use it)
-
-Simple dashboard or chat interface
-
-No one wins because of animations.
-
-7. Add ONE impressive twist
-This is where winners separate from “I made ChatGPT clone #482.”
-
-Ideas:
-
-Multi-agent system (agents collaborating)
-
-Real-world integration (payments, APIs, scraping)
-
-Domain-specific intelligence (education, health, finance)
-
-8. Polish + submit
-You need:
-
-Demo video
-
-Clear explanation
-
-Working prototype
-
-Judges don’t reward confusion.
-
-⚠️ Brutal reality check (you asked for ruthless)
-Most people will:
-
-Copy a tutorial
-
-Build a chatbot
-
-Submit garbage
-
-That’s your competition.
-
-If you do just slightly better thinking, you’re already ahead.
-
-💡 Smart project ideas (tailored to YOU)
-Given your background:
-
-1. AI Waste Marketplace Agent
-Users upload waste details
-
-AI:
-
-Classifies waste
-
-Finds buyers/recyclers
-
-Suggests pricing
-
-This ties directly to your existing project → unfair advantage.
-
-2. AI Job Hunter Agent
-Scrapes jobs (you already explored this)
-
-AI:
-
-Matches skills
-
-Auto-generates applications
-
-Tracks progress
-
-3. AI Study Companion (LMS tie-in)
-Takes notes → explains → quizzes → tracks learning
-
-🧠 Winning strategy (this is the part people ignore)
-You don’t win by coding the most.
-
-You win by:
-
-Picking a real problem
-
-Showing clear value
-
-Delivering a working demo
-
-Final reality punch
-You’re not “just participating.”
-
-You’re:
-
-Building a portfolio-level project
-
-Competing globally
-
-Testing if you can actually ship under pressure
-
-If you treat it like vibes and vibes alone, you’ll end up with a half-broken demo and a sad LinkedIn post.
-
-If you treat it like a product sprint, you might walk away with something serious.
-
-Now go build something that doesn’t look like it was assembled at 3am out of desperation.
-
-
-can u expand on the waste management idea and its AI-integration
-
-You finally picked something that isn’t another “AI chat app but with vibes.” Progress.
-
-Let’s stress-test this waste idea properly so it doesn’t collapse the moment a judge squints at it.
-
-🧠 Core Idea (but actually useful this time)
-AI-Powered Waste Marketplace + Sorting Assistant
-
-People with waste → AI identifies it → matches them to recyclers → suggests price → completes transaction
-
-This is not just “upload trash, get answer.”
-It’s a pipeline system.
-
-🧩 Break it into REAL components
-1. 🧾 Input Layer (where users start)
-Users can:
-
-Upload image of waste
-
-Describe it (text)
-
-Select location
-
-Example:
-
-“I have plastic bottles and old electronics”
-
-2. 🤖 AI Classification Layer (your first serious feature)
-What it does:
-Identifies type of waste:
-
-Plastic (PET, HDPE)
-
-Metal
-
-E-waste
-
-Organic
-
-How to implement:
-Option A (fast + hackathon-safe)
-Use a vision model API
-
-Example:
-
-LLaVA / GPT-4 vision-style models
-
-Prompt:
-
-Classify this waste into categories: plastic, metal, organic, e-waste.
-Also estimate recyclability and condition.
-Option B (harder but stronger)
-Fine-tune a small model on waste datasets
-
-Reality check:
-You don’t have time. Use Option A.
-
-3. 🧠 AI Reasoning Layer (this is where you stand out)
-Most people stop at classification. That’s why they lose.
-
-You add:
-
-A. Value estimation
-AI calculates:
-
-Estimated weight
-
-Market value
-
-Example:
-
-“~2kg PET plastic → ₦500–₦800 range”
-
-This is just:
-
-Prompt engineering + basic rules
-
-B. Recommendation engine
-AI suggests:
-
-Sell vs recycle vs dispose
-
-Nearby buyers
-
-C. Smart grouping
-If user uploads mixed waste:
-
-AI splits into categories
-
-Suggests:
-
-“Separate plastics from metals to increase value”
-
-That’s real intelligence, not demo fluff.
-
-4. 🏪 Marketplace Layer (your backend strength)
-Now your software engineering actually matters.
-
-You need:
-Database
-Users
-
-Listings
-
-Waste types
-
-Buyers/recyclers
-
-Features:
-Create listing
-
-View listings
-
-Accept offers
-
-5. 🔍 Matching Engine (this is your killer feature)
-AI + logic:
-
-Match:
-
-Waste type
-
-Location
-
-Buyer preferences
-
-Example:
-
-Recycler A wants plastics within Lagos
-→ match instantly
-
-6. 🤖 AI Agent Layer (this is how you win)
-Don’t just use AI. Make it act.
-
-Use:
-
-LangChain / CrewAI
-
-Agent responsibilities:
-Analyze waste
-
-Suggest pricing
-
-Find buyers
-
-Generate listing automatically
-
-User experience:
-
-User uploads image → everything else happens automatically
-
-That’s what judges like.
-
-7. 💬 Conversational Interface (optional but powerful)
-User can say:
-
-“I have scrap metal, what should I do?”
-
-AI:
-
-Asks follow-up questions
-
-Creates listing
-
-Suggests buyers
-
-🏗️ Suggested Architecture (don’t freestyle this)
-Frontend
-Next.js (you already know it)
-
-Upload + dashboard
-
-Backend
-Node.js (your comfort zone)
-
-API routes:
-
-/analyze-waste
-
-/create-listing
-
-/match-buyers
-
-AI Layer
-Hosted model on AMD cloud
-
-LangChain agent orchestration
-
-DB
-PostgreSQL (you already use it)
-
-⚠️ Where this idea usually fails
-Let me ruin your illusions early:
-
-❌ Mistake 1: “AI just classifies images”
-Congrats, you built a demo, not a product.
-
-❌ Mistake 2: No real marketplace logic
-If buyers aren’t integrated, it’s just:
-
-“Here’s your trash analysis. Good luck.”
-
-Useless.
-
-❌ Mistake 3: Overengineering ML
-You are not OpenAI.
-Don’t train models unless you enjoy suffering.
-
-❌ Mistake 4: No clear flow
-If I can’t understand:
-
-upload → AI → result → action
-
-You’ve already lost.
-
-💡 What makes this WINNING
-You’re sitting on a strong angle already:
-
-1. Real-world problem (Africa context)
-Waste management is not theoretical.
-
-2. Economic angle
-People make money → instant relevance
-
-3. AI actually adds value
-Not just decoration
-
-4. You already started similar project
-This is your unfair advantage
-
-🚀 MVP plan (what you can realistically build in 5–7 days)
-Day 1–2:
-AI classification working
-
-Basic backend
-
-Day 3–4:
-Listing system
-
-Matching logic
-
-Day 5:
-AI agent automation
-
-Day 6:
-UI polish
-
-Day 7:
-Demo + pitch
-
-🧠 Final reality check
-This idea is good. Not perfect.
-
-It becomes dangerous if:
-
-AI actually reduces friction
-
-Users can make money from it
-
-Flow is seamless
-
-If it turns into:
-
-“Upload image → AI says ‘plastic’ → end”
-
-Then congratulations, you built something judges forget before lunch.
-
-You’re close to something serious here. Just don’t sabotage it with lazy execution.
-
-
-
-
-use this information to preapre a nice lookign ui for @web 
-
-The name is wastestream ai, an AI marketplace for wastes.
-
-The ui should have a home page, login, signup, and a dashboard.
-
-The Home page:
-1. Simple Hero with clear call to action
-2. Nice bento box sections describing what wastream-does.
-3. Simple footer
-
-Login/Signup Page
-1. Nice form with Google Auth Alone
-2. No Email or password.
-
-Then onboarding - this is the part that will ask for Recycler or Waste providers specific info:
-For recyclers.
-- Fullname, age, location (use REST API), Recycling company/agency name, recycling company website(optional), bio/description, type fo waste collected: plastic, scrap, nylons, profile pic, 
-For waste providers.
-- Fullname, age, location, type of waste likely to trade, profile pic, bio,
-
-Without onboarding they can't access dashbaord.
- 
-Dashboard page
-- Simple sidebar.
-- Nice UI.
-- It's Mobile responsive.
-
-Design recommendations
-- Design styles are in @/public/design_references_samples
-- Font: Bricolage Grotesque.
-- Use bento-box design.
-- Shadcn UI & lucide react for icons
-- 
+- Implemented pages and components.
+- Any required route protection/onboarding guard logic.
+- Brief notes on where each requirement is implemented.
