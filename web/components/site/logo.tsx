@@ -8,8 +8,7 @@ export function Logo({ className }: { className?: string }) {
         <Recycle className="h-5 w-5" />
       </div>
       <div>
-        <p className="text-sm font-medium text-muted">WasteStream</p>
-        <p className="text-lg font-semibold tracking-tight">AI</p>
+        <p className="font-medium ">WasteStream AI </p>
       </div>
     </div>
   );
