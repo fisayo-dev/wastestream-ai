@@ -1,0 +1,78 @@
+import Link from "next/link";
+import { Orbit, ShieldCheck } from "lucide-react";
+import { Logo } from "@/components/site/logo";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+
+type AuthPageProps = {
+  mode: "login" | "signup";
+};
+
+const authCopy = {
+  login: {
+    title: "Welcome back to the marketplace",
+    subtitle: "Log in to continue your WasteStream AI workflow.",
+    cta: "Continue with Google",
+    secondaryText: "Need an account?",
+    secondaryHref: "/signup",
+    secondaryLabel: "Create one",
+  },
+  signup: {
+    title: "Join WasteStream AI",
+    subtitle: "Create your account as a recycler or provider.",
+    cta: "Sign up with Google",
+    secondaryText: "Already have an account?",
+    secondaryHref: "/login",
+    secondaryLabel: "Log in",
+  },
+} as const;
+
+export function AuthPage({ mode }: AuthPageProps) {
+  const copy = authCopy[mode];
+
+  return (
+    <main className="min-h-screen bg-background px-4 py-8 md:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-md items-center">
+        <div className="w-full">
+          <div className="mb-8 flex items-center justify-between">
+            <Logo />
+            <Badge>{mode === "login" ? "Login" : "Signup"}</Badge>
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-3xl font-semibold tracking-tight">{copy.title}</h2>
+            <p className="text-sm leading-6 text-muted">{copy.subtitle}</p>
+          </div>
+
+          <div className="mt-8 space-y-4">
+            <Button type="button" className="h-12 w-full rounded-xl text-base">
+              <Orbit className="h-5 w-5" />
+              {copy.cta}
+            </Button>
+          </div>
+
+          <div className="mt-4 rounded-2xl border border-border bg-card p-4">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex h-9 w-9 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <ShieldCheck className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Google-only authentication</p>
+                <p className="mt-1 text-sm leading-6 text-muted">
+                  Continue with your Google account. No passwords or email form fields are required.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-8 text-sm text-muted">
+            {copy.secondaryText}{" "}
+            <Link href={copy.secondaryHref} className="font-medium text-foreground">
+              {copy.secondaryLabel}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
