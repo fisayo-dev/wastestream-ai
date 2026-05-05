@@ -22,7 +22,7 @@ export function HomePage() {
     <main className="min-h-screen pb-10">
       <SiteHeader />
       <section className="px-4 pb-6 pt-10 md:px-8">
-        <div className="mx-auto max-w-6xl px-6 py-14 text-center md:px-10 md:py-16">
+        <div className="mx-auto max-w-6xl rounded-3xl border border-border bg-card px-6 py-14 text-center md:px-10 md:py-16">
           <div className="mx-auto h-1.5 w-28 rounded-full bg-linear-to-r from-transparent via-accent to-transparent" />
           <Badge className="mt-6 bg-accent/10 text-accent">AI marketplace for circular waste trade</Badge>
           <h1 className="mx-auto mt-5 max-w-4xl text-4xl font-semibold tracking-tight md:text-6xl">
