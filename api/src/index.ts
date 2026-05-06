@@ -10,13 +10,14 @@ const port = Number(process.env.PORT ?? 3000);
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (_req, res) => {
+
+app.get("/v1", (_req, res) => {
   res.json({
     message: "WasteStream API is running",
   });
 });
 
-app.get("/health", healthController);
+app.get("/v1/health", healthController);
 
 app.listen(port, () => {
   console.log(`API listening on http://localhost:${port}`);
