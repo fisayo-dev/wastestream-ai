@@ -1,5 +1,6 @@
-import { checkDatabaseConnection } from "../database";
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
+
+import { checkDatabaseConnection } from "../database/index.js";
 
 const healthController = async (_req: Request, res: Response) => {
   try {

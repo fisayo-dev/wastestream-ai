@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Bell,
   ChevronRight,
@@ -24,6 +25,8 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/site/logo";
+import type { BackendSession } from "@/lib/auth";
+import { logoutUrl } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -48,8 +51,19 @@ const quickActions = [
   { label: "Open messages", icon: MessageSquareMore },
 ];
 
-export function DashboardShell() {
+type DashboardShellProps = {
+  session: BackendSession;
+};
+
+export function DashboardShell({ session }: DashboardShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const router = useRouter();
+  const userInitials = session.user.name
+    .split(" ")
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("")
+    .slice(0, 2);
 
   return (
     <main className="min-h-screen p-4 md:p-6">
@@ -108,10 +122,31 @@ export function DashboardShell() {
                 <button
                   key={item.label}
                   type="button"
+                  onClick={
+                    item.label === "Logout"
+                      ? async () => {
+                          if (isLoggingOut) {
+                            return;
+                          }
+
+                          setIsLoggingOut(true);
+
+                          try {
+                            await fetch(logoutUrl, {
+                              method: "POST",
+                              credentials: "include",
+                            });
+                          } finally {
+                            router.replace("/login");
+                            router.refresh();
+                          }
+                        }
+                      : undefined
+                  }
                   className="flex items-center gap-3 rounded-[18px] px-3 py-3 text-sm text-muted hover:bg-white/6"
                 >
                   <Icon className="h-4 w-4" />
-                  {item.label}
+                  {item.label === "Logout" && isLoggingOut ? "Logging out..." : item.label}
                 </button>
               );
             })}
@@ -140,7 +175,7 @@ export function DashboardShell() {
               >
                 <Bell className="h-4 w-4" />
               </button>
-              <Avatar>DO</Avatar>
+              <Avatar>{userInitials}</Avatar>
             </div>
           </div>
 
@@ -150,7 +185,9 @@ export function DashboardShell() {
                 <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                   <div>
                     <Badge>Operations overview</Badge>
-                    <h2 className="mt-4 text-3xl font-semibold tracking-tight">Good afternoon, Dara</h2>
+                    <h2 className="mt-4 text-3xl font-semibold tracking-tight">
+                      Good afternoon, {session.user.name}
+                    </h2>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
                       Monitor active waste listings, recycler responses, and route-ready deals in one place.
                     </p>
