@@ -22,9 +22,9 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
   }),
 );
-app.use(express.json());
 
 app.all(`${authBasePath}/*splat`, toNodeHandler(auth));
+app.use(express.json());
 
 // Base route
 app.get("/v1", (_req, res) => {

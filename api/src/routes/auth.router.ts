@@ -1,8 +1,11 @@
-import { fromNodeHeaders } from "better-auth/node";
 import { Router } from "express";
-import { auth, frontendURL } from "../lib/auth";
+import { frontendURL } from "../lib/auth";
 import { authBasePath, port } from "../constants/general";
-import { applyHeadersToResponse } from "../lib/http";
+import {
+  getAuthProfileController,
+  getSessionController,
+  logoutController,
+} from "../controllers/auth.controller";
 
 const authRouter = Router();
 
@@ -23,22 +26,8 @@ authRouter.get("/google", (req, res) => {
   res.redirect(signInURL.pathname + signInURL.search);
 });
 
-authRouter.get("/session", async (req, res) => {
-  const session = await auth.api.getSession({
-    headers: fromNodeHeaders(req.headers),
-  });
-
-  res.json(session ?? null);
-});
-
-authRouter.post("/logout", async (req, res) => {
-  const result = await auth.api.signOut({
-    headers: fromNodeHeaders(req.headers),
-    returnHeaders: true,
-  });
-
-  applyHeadersToResponse(res, result.headers);
-  res.status(200).json({ success: true });
-});
+authRouter.get("/session", getSessionController);
+authRouter.get("/profile", getAuthProfileController);
+authRouter.post("/logout", logoutController);
 
 export default authRouter;
