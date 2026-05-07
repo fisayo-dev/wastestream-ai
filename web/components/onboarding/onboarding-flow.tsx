@@ -159,68 +159,10 @@ export function OnboardingFlow() {
     setStatus("success");
   }
 
-  const Icon = currentMeta.icon;
 
   return (
     <main className="min-h-screen px-4 py-6 md:px-8">
       <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-        <section className="rounded-2xl border border-border bg-card p-8">
-          <Badge>Mandatory onboarding UI</Badge>
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight">
-            Finish profile setup before entering the dashboard.
-          </h1>
-          <p className="mt-4 max-w-lg text-sm leading-7 text-muted">
-            This page implements the required role selection and field sets. Interactions are local UI-only, with validation and status feedback but no backend persistence.
-          </p>
-
-          <div className="mt-8 grid gap-4">
-            {(["recycler", "provider"] as const).map((item) => {
-              const itemMeta = roleMeta[item];
-              const ItemIcon = itemMeta.icon;
-              const active = item === role;
-
-              return (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => {
-                    setRole(item);
-                    setErrors({});
-                    setStatus("idle");
-                  }}
-                  className={cn(
-                    "rounded-xl border p-5 text-left",
-                    active
-                      ? "border-accent bg-accent/10"
-                      : "border-border bg-card-strong hover:bg-white/6",
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-lg font-medium">{itemMeta.title}</p>
-                      <p className="mt-2 text-sm leading-6 text-muted">{itemMeta.description}</p>
-                    </div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-black/20 text-accent">
-                      <ItemIcon className="h-5 w-5" />
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="mt-8 rounded-xl border border-border bg-card-strong p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent/10 text-accent">
-                <Icon className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="font-medium">{currentMeta.title}</p>
-                <p className="text-sm text-muted">Role-specific fields render below.</p>
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section className="rounded-2xl border border-border bg-card p-6 sm:p-8">
           <div className="grid gap-5 md:grid-cols-2">
