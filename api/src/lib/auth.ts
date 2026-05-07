@@ -5,13 +5,13 @@ import { config } from "dotenv";
 import { db } from "../database/index";
 import * as schema from "../database/schema";
 
-config()
+config();
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const port = Number(process.env.PORT);
-const baseURL = process.env.BETTER_AUTH_URL!;
-const frontendURL = process.env.FRONTEND_URL!;
+const baseURL = process.env.BETTER_AUTH_URL;
+const frontendURL = process.env.FRONTEND_URL ?? "https://localhost:2900";
 
 if (!googleClientId || !googleClientSecret) {
   throw new Error("Google OAuth credentials are not configured");

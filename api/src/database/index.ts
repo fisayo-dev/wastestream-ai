@@ -17,7 +17,7 @@ export const pool = new Pool({
   },
 });
 
-export const db = drizzle({ client: pool, schema });
+export const db = drizzle(pool, { schema });
 
 export async function checkDatabaseConnection() {
   const result = await db.execute(sql`select now() as connected_at`);
