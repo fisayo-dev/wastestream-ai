@@ -1,3 +1,5 @@
+import { WasteTypeOption } from "@/types/waste";
+
 export const apiBaseUrl =
   process.env.NEXT_BACKEND_PUBLIC_URL ?? "http://localhost:2300/v1";
 
@@ -24,10 +26,7 @@ export type BackendSession = {
   };
 };
 
-export type WasteTypeOption = {
-  slug: string;
-  label: string;
-};
+
 
 export type PersonalProfile = {
   userId: string;

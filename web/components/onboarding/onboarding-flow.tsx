@@ -13,153 +13,12 @@ import { useBackendSession } from "@/hooks/use-backend-session";
 import {
   type BackendAuthProfile,
   userProfileUrl,
-  type WasteTypeOption,
 } from "@/lib/auth";
 import { cn } from "@/lib/utils";
+import { FormState } from "@/types/onboarding";
+import { buildFormFromProfile } from "@/utils/onboarding";
+import { fallbackWasteTypes, onboardingSteps } from "@/constants/onboarding";
 
-type Role = "recycler" | "waste-provider";
-
-type FormState = {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  bio: string;
-  country: string;
-  role: Role;
-  recycler: {
-    wasteTypesAccepted: string[];
-    collectionCapacityAmount: string;
-    collectionCapacityUnit: string;
-    pickupAvailability: string;
-    serviceCountry: string;
-    serviceState: string;
-    serviceCity: string;
-    businessDescription: string;
-  };
-  wasteProvider: {
-    wasteTypesProvided: string[];
-    estimatedQuantityAmount: string;
-    estimatedQuantityUnit: string;
-    frequency: string;
-    wasteCondition: string;
-    country: string;
-    state: string;
-    city: string;
-    additionalNotes: string;
-  };
-};
-
-const stepCopy = [
-  {
-    id: 1,
-    title: "Personal details",
-    description: "Confirm your contact details before you join the marketplace.",
-  },
-  {
-    id: 2,
-    title: "Account type",
-    description: "Tell WasteStream whether you supply waste or recycle it.",
-  },
-  {
-    id: 3,
-    title: "Operational details",
-    description: "Add the details that drive matching and logistics.",
-  },
-] as const;
-
-const fallbackWasteTypes: WasteTypeOption[] = [
-  { slug: "plastic", label: "Plastic" },
-  { slug: "metal", label: "Metal" },
-  { slug: "paper", label: "Paper" },
-  { slug: "glass", label: "Glass" },
-  { slug: "organic", label: "Organic" },
-  { slug: "e-waste", label: "E-waste" },
-  { slug: "textile", label: "Textile" },
-  { slug: "rubber", label: "Rubber" },
-];
-
-function createEmptyForm(): FormState {
-  return {
-    fullName: "",
-    email: "",
-    phoneNumber: "",
-    bio: "",
-    country: "",
-    role: "recycler",
-    recycler: {
-      wasteTypesAccepted: [],
-      collectionCapacityAmount: "",
-      collectionCapacityUnit: "",
-      pickupAvailability: "",
-      serviceCountry: "",
-      serviceState: "",
-      serviceCity: "",
-      businessDescription: "",
-    },
-    wasteProvider: {
-      wasteTypesProvided: [],
-      estimatedQuantityAmount: "",
-      estimatedQuantityUnit: "",
-      frequency: "",
-      wasteCondition: "",
-      country: "",
-      state: "",
-      city: "",
-      additionalNotes: "",
-    },
-  };
-}
-
-function buildFormFromProfile(profile: BackendAuthProfile): FormState {
-  const nextState = createEmptyForm();
-  nextState.fullName = profile.personalProfile?.fullName ?? profile.user.name ?? "";
-  nextState.email = profile.user.email ?? "";
-  nextState.phoneNumber = profile.personalProfile?.phoneNumber ?? "";
-  nextState.bio = profile.personalProfile?.bio ?? "";
-  nextState.country = profile.personalProfile?.country ?? "";
-  nextState.role = profile.onboardingRole ?? "recycler";
-
-  if (profile.onboardingRole === "recycler" && profile.roleProfile) {
-    const recyclerProfile = profile.roleProfile;
-
-    if ("wasteTypesAccepted" in recyclerProfile) {
-      nextState.recycler = {
-        wasteTypesAccepted: recyclerProfile.wasteTypesAccepted.map(
-          (item) => item.slug,
-        ),
-        collectionCapacityAmount: recyclerProfile.collectionCapacityAmount,
-        collectionCapacityUnit: recyclerProfile.collectionCapacityUnit,
-        pickupAvailability: recyclerProfile.pickupAvailability,
-        serviceCountry: recyclerProfile.serviceCountry,
-        serviceState: recyclerProfile.serviceState,
-        serviceCity: recyclerProfile.serviceCity,
-        businessDescription: recyclerProfile.businessDescription ?? "",
-      };
-    }
-  }
-
-  if (profile.onboardingRole === "waste-provider" && profile.roleProfile) {
-    const wasteProviderProfile = profile.roleProfile;
-
-    if ("wasteTypesProvided" in wasteProviderProfile) {
-      nextState.wasteProvider = {
-        wasteTypesProvided: wasteProviderProfile.wasteTypesProvided.map(
-          (item) => item.slug,
-        ),
-        estimatedQuantityAmount: wasteProviderProfile.estimatedQuantityAmount,
-        estimatedQuantityUnit: wasteProviderProfile.estimatedQuantityUnit,
-        frequency: wasteProviderProfile.frequency,
-        wasteCondition: wasteProviderProfile.wasteCondition,
-        country: wasteProviderProfile.country,
-        state: wasteProviderProfile.state,
-        city: wasteProviderProfile.city,
-        additionalNotes: wasteProviderProfile.additionalNotes ?? "",
-      };
-    }
-  }
-
-  return nextState;
-}
 
 export function OnboardingFlow() {
   const { data, isLoading } = useBackendSession();
@@ -193,7 +52,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
   const [isSaving, setIsSaving] = useState(false);
 
   const wasteTypes = data.wasteTypes.length > 0 ? data.wasteTypes : fallbackWasteTypes;
-  const currentStep = stepCopy[step - 1];
+  const currentStep = onboardingSteps[step - 1];
   const avatarInitials = data.user.name
     .split(" ")
     .map((part) => part[0] ?? "")
@@ -461,7 +320,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
             </div>
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
-              {stepCopy.map((item) => {
+              {onboardingSteps.map((item) => {
                 const isActive = item.id === step;
                 const isComplete = item.id < step;
 
