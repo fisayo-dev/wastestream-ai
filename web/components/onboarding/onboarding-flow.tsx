@@ -9,16 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useBackendSession } from "@/hooks/use-backend-session";
-import {
-  type BackendAuthProfile,
-  userProfileUrl,
-} from "@/lib/auth";
+import { type BackendAuthProfile, userProfileUrl } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { FormState } from "@/types/onboarding";
 import { buildFormFromProfile } from "@/utils/onboarding";
 import { fallbackWasteTypes, onboardingSteps } from "@/constants/onboarding";
-
+import { WasteTypeOption } from "@/types/waste";
 
 export function OnboardingFlow() {
   const { data, isLoading } = useBackendSession();
@@ -51,7 +49,8 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
   const [submitError, setSubmitError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
-  const wasteTypes = data.wasteTypes.length > 0 ? data.wasteTypes : fallbackWasteTypes;
+  const wasteTypes =
+    data.wasteTypes.length > 0 ? data.wasteTypes : fallbackWasteTypes;
   const currentStep = onboardingSteps[step - 1];
   const avatarInitials = data.user.name
     .split(" ")
@@ -61,7 +60,10 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
     .toUpperCase();
 
   function updatePersonalField(
-    field: keyof Pick<FormState, "fullName" | "phoneNumber" | "bio" | "country">,
+    field: keyof Pick<
+      FormState,
+      "fullName" | "phoneNumber" | "bio" | "country"
+    >,
     value: string,
   ) {
     setForm((current) => ({
@@ -101,8 +103,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
       ...current,
       recycler: {
         ...current.recycler,
-        serviceCountry:
-          current.recycler.serviceCountry || current.country,
+        serviceCountry: current.recycler.serviceCountry || current.country,
       },
       wasteProvider: {
         ...current.wasteProvider,
@@ -133,17 +134,20 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
 
     if (nextStep >= 1) {
       if (!form.fullName.trim()) nextErrors.fullName = "Full name is required.";
-      if (!form.phoneNumber.trim()) nextErrors.phoneNumber = "Phone number is required.";
+      if (!form.phoneNumber.trim())
+        nextErrors.phoneNumber = "Phone number is required.";
       if (!form.country.trim()) nextErrors.country = "Country is required.";
     }
 
     if (nextStep >= 3) {
       if (form.role === "recycler") {
         if (form.recycler.wasteTypesAccepted.length === 0) {
-          nextErrors.recyclerWasteTypesAccepted = "Select at least one waste type.";
+          nextErrors.recyclerWasteTypesAccepted =
+            "Select at least one waste type.";
         }
         if (!form.recycler.collectionCapacityAmount.trim()) {
-          nextErrors.recyclerCollectionCapacityAmount = "Capacity amount is required.";
+          nextErrors.recyclerCollectionCapacityAmount =
+            "Capacity amount is required.";
         }
         if (!form.recycler.collectionCapacityUnit.trim()) {
           nextErrors.recyclerCollectionCapacityUnit = "Select a capacity unit.";
@@ -162,13 +166,16 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
         }
       } else {
         if (form.wasteProvider.wasteTypesProvided.length === 0) {
-          nextErrors.wasteProviderWasteTypesProvided = "Select at least one waste type.";
+          nextErrors.wasteProviderWasteTypesProvided =
+            "Select at least one waste type.";
         }
         if (!form.wasteProvider.estimatedQuantityAmount.trim()) {
-          nextErrors.wasteProviderEstimatedQuantityAmount = "Quantity amount is required.";
+          nextErrors.wasteProviderEstimatedQuantityAmount =
+            "Quantity amount is required.";
         }
         if (!form.wasteProvider.estimatedQuantityUnit.trim()) {
-          nextErrors.wasteProviderEstimatedQuantityUnit = "Select a quantity unit.";
+          nextErrors.wasteProviderEstimatedQuantityUnit =
+            "Select a quantity unit.";
         }
         if (!form.wasteProvider.frequency.trim()) {
           nextErrors.wasteProviderFrequency = "Select a frequency.";
@@ -224,7 +231,8 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
             role: "recycler",
             recycler: {
               wasteTypesAccepted: form.recycler.wasteTypesAccepted,
-              collectionCapacityAmount: form.recycler.collectionCapacityAmount.trim(),
+              collectionCapacityAmount:
+                form.recycler.collectionCapacityAmount.trim(),
               collectionCapacityUnit: form.recycler.collectionCapacityUnit,
               pickupAvailability: form.recycler.pickupAvailability,
               serviceCountry: form.recycler.serviceCountry.trim(),
@@ -241,7 +249,8 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
             role: "waste-provider",
             wasteProvider: {
               wasteTypesProvided: form.wasteProvider.wasteTypesProvided,
-              estimatedQuantityAmount: form.wasteProvider.estimatedQuantityAmount.trim(),
+              estimatedQuantityAmount:
+                form.wasteProvider.estimatedQuantityAmount.trim(),
               estimatedQuantityUnit: form.wasteProvider.estimatedQuantityUnit,
               frequency: form.wasteProvider.frequency,
               wasteCondition: form.wasteProvider.wasteCondition,
@@ -263,12 +272,15 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
       });
 
       if (!response.ok) {
-        const result = (await response.json().catch(() => null)) as
-          | { message?: string; errors?: string[] }
-          | null;
+        const result = (await response.json().catch(() => null)) as {
+          message?: string;
+          errors?: string[];
+        } | null;
 
         setSubmitError(
-          result?.errors?.[0] ?? result?.message ?? "Unable to complete onboarding.",
+          result?.errors?.[0] ??
+            result?.message ??
+            "Unable to complete onboarding.",
         );
         return;
       }
@@ -283,9 +295,9 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
   return (
     <main className="min-h-screen px-4 py-6 md:px-8 md:py-8">
       <div className="mx-auto max-w-5xl">
-        <div className="border border-border bg-card/70">
-          <header className="border-b border-border px-5 py-6 md:px-8">
-            <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
+        <div>
+          <header className="px-5 py-6 md:px-8">
+            <div className="flex flex-col gap-5 md:flex-row items-start md:items-center md:justify-between">
               <div className="max-w-2xl">
                 <p className="text-sm uppercase tracking-[0.18em] text-muted">
                   Onboarding
@@ -294,26 +306,26 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                   Set up your marketplace profile
                 </h1>
                 <p className="mt-3 max-w-xl text-sm leading-6 text-muted">
-                  Three short steps. We use this to route waste to the right operator
-                  with fewer bad matches.
+                  Three short steps. We use this to route waste to the right
+                  operator with fewer bad matches.
                 </p>
               </div>
 
-              <div className="flex items-center gap-3 border border-border bg-background/40 px-4 py-3">
+              <div className="flex items-center gap-3 bg-background/20 px-4 py-3">
                 {data.user.image ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={data.user.image}
-                    alt={data.user.name}
-                    className="h-12 w-12 rounded-full object-cover"
-                  />
+                  <Avatar>
+                    <AvatarImage src={data.user.image} />
+                    <AvatarFallback>{data.user.name.split(" ")[0]}</AvatarFallback>
+                  </Avatar>
                 ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-white/5 text-sm font-semibold">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full  bg-white/5 text-sm font-semibold">
                     {avatarInitials}
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-medium">{form.fullName || data.user.name}</p>
+                  <p className="text-sm font-medium">
+                    {form.fullName || data.user.name}
+                  </p>
                   <p className="text-xs text-muted">{data.user.email}</p>
                 </div>
               </div>
@@ -372,7 +384,9 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
               <p className="text-sm uppercase tracking-[0.18em] text-muted">
                 Step {step}
               </p>
-              <h2 className="mt-2 text-2xl font-semibold">{currentStep.title}</h2>
+              <h2 className="mt-2 text-2xl font-semibold">
+                {currentStep.title}
+              </h2>
               <p className="mt-2 text-sm leading-6 text-muted">
                 {currentStep.description}
               </p>
@@ -522,10 +536,15 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       ].map((option) => (
                         <ChoicePill
                           key={option.value}
-                          active={form.recycler.pickupAvailability === option.value}
+                          active={
+                            form.recycler.pickupAvailability === option.value
+                          }
                           label={option.label}
                           onClick={() =>
-                            updateRecyclerField("pickupAvailability", option.value)
+                            updateRecyclerField(
+                              "pickupAvailability",
+                              option.value,
+                            )
                           }
                         />
                       ))}
@@ -540,7 +559,10 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       <Input
                         value={form.recycler.serviceCountry}
                         onChange={(event) =>
-                          updateRecyclerField("serviceCountry", event.target.value)
+                          updateRecyclerField(
+                            "serviceCountry",
+                            event.target.value,
+                          )
                         }
                         placeholder="Nigeria"
                       />
@@ -549,7 +571,10 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       <Input
                         value={form.recycler.serviceState}
                         onChange={(event) =>
-                          updateRecyclerField("serviceState", event.target.value)
+                          updateRecyclerField(
+                            "serviceState",
+                            event.target.value,
+                          )
                         }
                         placeholder="Lagos"
                       />
@@ -644,18 +669,23 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       <Select
                         value={form.wasteProvider.frequency}
                         onChange={(event) =>
-                          updateWasteProviderField("frequency", event.target.value)
+                          updateWasteProviderField(
+                            "frequency",
+                            event.target.value,
+                          )
                         }
                         options={[
                           { label: "Select frequency", value: "" },
-                          ...data.meta.providerFrequencyOptions.map((option) => ({
-                            label: option
-                              .replace("one-time", "One-time")
-                              .replace("daily", "Daily")
-                              .replace("weekly", "Weekly")
-                              .replace("monthly", "Monthly"),
-                            value: option,
-                          })),
+                          ...data.meta.providerFrequencyOptions.map(
+                            (option) => ({
+                              label: option
+                                .replace("one-time", "One-time")
+                                .replace("daily", "Daily")
+                                .replace("weekly", "Weekly")
+                                .replace("monthly", "Monthly"),
+                              value: option,
+                            }),
+                          ),
                         ]}
                       />
                     </Field>
@@ -686,14 +716,14 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                   </div>
 
                   <div className="grid gap-5 md:grid-cols-3">
-                    <Field
-                      label="Country"
-                      error={errors.wasteProviderCountry}
-                    >
+                    <Field label="Country" error={errors.wasteProviderCountry}>
                       <Input
                         value={form.wasteProvider.country}
                         onChange={(event) =>
-                          updateWasteProviderField("country", event.target.value)
+                          updateWasteProviderField(
+                            "country",
+                            event.target.value,
+                          )
                         }
                         placeholder="Nigeria"
                       />
@@ -763,7 +793,11 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     Continue
                   </Button>
                 ) : (
-                  <Button type="button" onClick={handleSubmit} disabled={isSaving}>
+                  <Button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isSaving}
+                  >
                     {isSaving ? (
                       <>
                         <LoaderCircle className="h-4 w-4 animate-spin" />
@@ -796,7 +830,9 @@ function Field({ children, className, error, label, optional }: FieldProps) {
     <div className={cn("space-y-2", className)}>
       <Label className="flex items-center gap-2 text-sm">
         {label}
-        {optional ? <span className="text-xs text-muted">(optional)</span> : null}
+        {optional ? (
+          <span className="text-xs text-muted">(optional)</span>
+        ) : null}
       </Label>
       {children}
       {error ? <p className="text-sm text-danger">{error}</p> : null}
