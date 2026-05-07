@@ -1,73 +1,49 @@
-import * as dotenv from "dotenv";
+import { config } from "dotenv";
 import cors from "cors";
 import express from "express";
-import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
+import { toNodeHandler } from "better-auth/node";
 
-import { auth, frontendURL } from "./lib/auth";
-import healthController from "./controllers/health";
+import healthController from "./controllers/health.controller";
 import { ensureAuthSchema } from "./database/ensure-auth-schema";
-import { applyHeadersToResponse } from "./lib/http";
+import { authBasePath, port } from "./constants/general";
+import { auth, frontendURL } from "./lib/auth";
+import userRouter from "./routes/user.router";
+import authRouter from "./routes/auth.router";
 
-dotenv.config();
+config();
 
 const app = express();
-const port = Number(process.env.PORT ?? 2300);
-const authBasePath = "/api/auth";
 
+// cors
 app.use(
   cors({
     origin: frontendURL,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"],
   }),
 );
-
-app.all(`${authBasePath}/*splat`, toNodeHandler(auth));
 app.use(express.json());
 
+app.all(`${authBasePath}/*splat`, toNodeHandler(auth));
+
+// Base route
 app.get("/v1", (_req, res) => {
   res.json({
     message: "WasteStream API is running",
   });
 });
 
+// Health
 app.head("/v1/health", healthController);
 app.get("/v1/health", healthController);
 
-app.get("/v1/auth/google", (req, res) => {
-  const callbackURL =
-    typeof req.query.callbackURL === "string" &&
-    req.query.callbackURL.length > 0
-      ? req.query.callbackURL
-      : `${frontendURL}/dashboard`;
+// Auth
+app.use("/v1/auth", authRouter);
 
-  const signInURL = new URL(
-    `${authBasePath}/sign-in/social`,
-    `http://localhost:${port}`,
-  );
-  signInURL.searchParams.set("provider", "google");
-  signInURL.searchParams.set("callbackURL", callbackURL);
+// User
+app.use("/v1/user", userRouter);
 
-  res.redirect(signInURL.pathname + signInURL.search);
-});
-
-app.get("/v1/auth/session", async (req, res) => {
-  const session = await auth.api.getSession({
-    headers: fromNodeHeaders(req.headers),
-  });
-
-  res.json(session ?? null);
-});
-
-app.post("/v1/auth/logout", async (req, res) => {
-  const result = await auth.api.signOut({
-    headers: fromNodeHeaders(req.headers),
-    returnHeaders: true,
-  });
-
-  applyHeadersToResponse(res, result.headers);
-  res.status(200).json({ success: true });
-});
-
+// Start server
 async function bootstrap() {
   await ensureAuthSchema();
 
