@@ -7,89 +7,20 @@ export async function ensureAuthSchema() {
     return;
   }
 
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS "user" (
-      "id" text PRIMARY KEY,
-      "name" text NOT NULL,
-      "email" text NOT NULL,
-      "emailVerified" boolean NOT NULL DEFAULT false,
-      "image" text,
-      "createdAt" timestamptz NOT NULL,
-      "updatedAt" timestamptz NOT NULL
+  const result = await pool.query<{
+    table_name: string;
+  }>(`
+    select table_name
+    from information_schema.tables
+    where table_schema = 'public'
+      and table_name in ('user', 'session', 'account', 'verification');
+  `);
+
+  if (result.rows.length < 4) {
+    throw new Error(
+      "Auth tables are missing. Run `npm run db:push` for local sync or `npm run db:migrate` after generating migrations.",
     );
-  `);
-
-  await pool.query(`
-    CREATE UNIQUE INDEX IF NOT EXISTS "user_email_unique"
-    ON "user" ("email");
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS "session" (
-      "id" text PRIMARY KEY,
-      "expiresAt" timestamptz NOT NULL,
-      "token" text NOT NULL,
-      "createdAt" timestamptz NOT NULL,
-      "updatedAt" timestamptz NOT NULL,
-      "ipAddress" text,
-      "userAgent" text,
-      "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE
-    );
-  `);
-
-  await pool.query(`
-    CREATE UNIQUE INDEX IF NOT EXISTS "session_token_unique"
-    ON "session" ("token");
-  `);
-
-  await pool.query(`
-    CREATE INDEX IF NOT EXISTS "session_userId_idx"
-    ON "session" ("userId");
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS "account" (
-      "id" text PRIMARY KEY,
-      "accountId" text NOT NULL,
-      "providerId" text NOT NULL,
-      "userId" text NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
-      "accessToken" text,
-      "refreshToken" text,
-      "idToken" text,
-      "accessTokenExpiresAt" timestamptz,
-      "refreshTokenExpiresAt" timestamptz,
-      "scope" text,
-      "password" text,
-      "createdAt" timestamptz NOT NULL,
-      "updatedAt" timestamptz NOT NULL
-    );
-  `);
-
-  await pool.query(`
-    CREATE INDEX IF NOT EXISTS "account_userId_idx"
-    ON "account" ("userId");
-  `);
-
-  await pool.query(`
-    CREATE UNIQUE INDEX IF NOT EXISTS "account_provider_account_unique"
-    ON "account" ("providerId", "accountId");
-  `);
-
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS "verification" (
-      "id" text PRIMARY KEY,
-      "identifier" text NOT NULL,
-      "value" text NOT NULL,
-      "expiresAt" timestamptz NOT NULL,
-      "createdAt" timestamptz NOT NULL,
-      "updatedAt" timestamptz NOT NULL
-    );
-  `);
-
-  await pool.query(`
-    CREATE INDEX IF NOT EXISTS "verification_identifier_idx"
-    ON "verification" ("identifier");
-  `);
+  }
 
   ensured = true;
 }
