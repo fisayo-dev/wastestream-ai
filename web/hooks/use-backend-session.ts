@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-import { sessionUrl, type BackendSession } from "@/lib/auth";
+import { authProfileUrl, type BackendAuthProfile } from "@/lib/auth";
 
 type SessionState = {
-  data: BackendSession | null;
+  data: BackendAuthProfile | null;
   isLoading: boolean;
 };
 
@@ -20,7 +20,7 @@ export function useBackendSession() {
 
     async function loadSession() {
       try {
-        const response = await fetch(sessionUrl, {
+        const response = await fetch(authProfileUrl, {
           credentials: "include",
         });
 
@@ -28,7 +28,7 @@ export function useBackendSession() {
           throw new Error("Failed to load session");
         }
 
-        const payload = (await response.json()) as BackendSession | null;
+        const payload = (await response.json()) as BackendAuthProfile | null;
         if (active) {
           setState({
             data: payload,
