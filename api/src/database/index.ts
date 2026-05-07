@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { sql } from "drizzle-orm";
 import { Pool } from "pg";
+import * as schema from "./schema";
 
 config();
 
@@ -16,7 +17,7 @@ export const pool = new Pool({
   },
 });
 
-export const db = drizzle({ client: pool });
+export const db = drizzle({ client: pool, schema });
 
 export async function checkDatabaseConnection() {
   const result = await db.execute(sql`select now() as connected_at`);
