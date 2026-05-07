@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import type { CSSProperties } from "react";
+import { Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
+
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "WasteStream AI",
@@ -13,11 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className="h-full antialiased"
-      style={{ "--font-bricolage": '"Segoe UI", "Helvetica Neue", sans-serif' } as CSSProperties}
-    >
+    <html lang="en" className={`${bricolage.variable} h-full antialiased`}>
       <body>{children}</body>
     </html>
   );
