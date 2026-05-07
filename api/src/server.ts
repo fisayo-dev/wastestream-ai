@@ -1,4 +1,4 @@
-import "dotenv/config";
+import * as dotenv from "dotenv";
 import cors from "cors";
 import express from "express";
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
@@ -7,6 +7,8 @@ import { auth, frontendURL } from "./lib/auth";
 import healthController from "./controllers/health";
 import { ensureAuthSchema } from "./database/ensure-auth-schema";
 import { applyHeadersToResponse } from "./lib/http";
+
+dotenv.config();
 
 const app = express();
 const port = Number(process.env.PORT ?? 2300);
