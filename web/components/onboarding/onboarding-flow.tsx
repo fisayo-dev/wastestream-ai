@@ -349,7 +349,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       }
                     }}
                     className={cn(
-                      "border px-4 py-4 text-left",
+                      "border rounded-2xl px-4 py-4 text-left",
                       isActive
                         ? "border-accent bg-accent/8"
                         : "border-border bg-transparent hover:bg-white/4",
@@ -358,7 +358,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     <div className="flex items-center gap-3">
                       <div
                         className={cn(
-                          "flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold",
+                          "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
                           isComplete || isActive
                             ? "border-accent bg-accent text-[#13210f]"
                             : "border-border text-muted",
@@ -431,7 +431,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       updatePersonalField("bio", event.target.value)
                     }
                     placeholder="Optional context about your operation."
-                    className="min-h-28 rounded-none"
+                    className="min-h-28 resize-none"
                   />
                 </Field>
               </div>
@@ -600,7 +600,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                         )
                       }
                       placeholder="We recycle PET plastics and aluminum cans."
-                      className="min-h-28 rounded-none"
+                      className="min-h-28 resize-none"
                     />
                   </Field>
                 </div>
@@ -766,14 +766,14 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
             ) : null}
           </section>
 
-          <footer className="border-t border-border px-5 py-5 md:px-8">
+          <footer className="px-5 py-5 md:px-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
                 {submitError ? (
                   <p className="text-sm text-danger">{submitError}</p>
                 ) : (
                   <p className="text-sm text-muted">
-                    Your email comes from the active session and stays locked.
+                    Its neccessary we onboard our users.
                   </p>
                 )}
               </div>
@@ -873,7 +873,7 @@ function RoleOption({
       type="button"
       onClick={onClick}
       className={cn(
-        "border px-5 py-5 text-left",
+        "border rounded-2xl px-5 py-5 text-left",
         active ? "border-accent bg-accent/8" : "border-border hover:bg-white/4",
       )}
     >
@@ -915,7 +915,7 @@ function WasteTypeGrid({
             type="button"
             onClick={() => onToggle(option.slug)}
             className={cn(
-              "flex items-center justify-between border px-4 py-3 text-left text-sm",
+              "flex items-center justify-between border rounded-2xl px-4 py-3 text-left text-sm",
               active
                 ? "border-accent bg-accent/8 text-foreground"
                 : "border-border hover:bg-white/4",
@@ -944,7 +944,7 @@ function ChoicePill({
       type="button"
       onClick={onClick}
       className={cn(
-        "border px-4 py-3 text-left text-sm",
+        "border rounded-2xl px-4 py-3 text-left text-sm",
         active ? "border-accent bg-accent/8" : "border-border hover:bg-white/4",
       )}
     >
