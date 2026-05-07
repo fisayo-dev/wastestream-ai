@@ -3,10 +3,10 @@ import cors from "cors";
 import express from "express";
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 
-import { auth, frontendURL } from "./auth.js";
-import healthController from "./controllers/health.js";
-import { ensureAuthSchema } from "./database/ensure-auth-schema.js";
-import { applyHeadersToResponse } from "./lib/http.js";
+import { auth, frontendURL } from "./lib/auth";
+import healthController from "./controllers/health";
+import { ensureAuthSchema } from "./database/ensure-auth-schema";
+import { applyHeadersToResponse } from "./lib/http";
 
 const app = express();
 const port = Number(process.env.PORT ?? 2300);
@@ -22,22 +22,26 @@ app.use(
 app.all(`${authBasePath}/*splat`, toNodeHandler(auth));
 app.use(express.json());
 
-
 app.get("/v1", (_req, res) => {
   res.json({
     message: "WasteStream API is running",
   });
 });
 
+app.head("/v1/health", healthController);
 app.get("/v1/health", healthController);
 
 app.get("/v1/auth/google", (req, res) => {
   const callbackURL =
-    typeof req.query.callbackURL === "string" && req.query.callbackURL.length > 0
+    typeof req.query.callbackURL === "string" &&
+    req.query.callbackURL.length > 0
       ? req.query.callbackURL
       : `${frontendURL}/dashboard`;
 
-  const signInURL = new URL(`${authBasePath}/sign-in/social`, `http://localhost:${port}`);
+  const signInURL = new URL(
+    `${authBasePath}/sign-in/social`,
+    `http://localhost:${port}`,
+  );
   signInURL.searchParams.set("provider", "google");
   signInURL.searchParams.set("callbackURL", callbackURL);
 

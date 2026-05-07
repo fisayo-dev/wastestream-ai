@@ -1,6 +1,6 @@
 import { getMigrations } from "better-auth/db/migration";
 
-import { auth } from "../auth.js";
+import { auth } from "../lib/auth";
 
 let ensured = false;
 

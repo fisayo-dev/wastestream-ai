@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 
-import { pool } from "./database/index.js";
+import { pool } from "../database/index";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
