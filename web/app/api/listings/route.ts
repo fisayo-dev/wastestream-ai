@@ -7,6 +7,7 @@ export async function POST(req: Request) {
   const authRes = await fetch(authProfileUrl, {
     headers: { cookie },
     cache: "no-store",
+    credentials: "include"
   });
 
   if (!authRes.ok) {
