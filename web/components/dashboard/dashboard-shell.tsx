@@ -68,7 +68,7 @@ export function DashboardShell({ session }: DashboardShellProps) {
       <div className="mx-auto flex max-w-6xl gap-4 lg:gap-6">
         <aside
           className={cn(
-            "fixed inset-y-4 left-4 z-40 flex w-[280px] flex-col rounded-2xl border border-border bg-card p-5 transition-transform lg:static lg:translate-x-0",
+            "fixed inset-y-4 left-4 z-40 flex w-[280px] flex-col p-2 transition-transform lg:static lg:translate-x-0",
             sidebarOpen ? "translate-x-0" : "translate-x-[-120%]",
           )}
         >
@@ -91,7 +91,9 @@ export function DashboardShell({ session }: DashboardShellProps) {
                   type="button"
                   className={cn(
                     "flex w-full items-center gap-3 rounded-[20px] px-4 py-3 text-left text-sm",
-                    item.active ? "bg-accent text-[#13210f]" : "bg-white/4 text-muted hover:bg-white/8",
+                    item.active ?
+                      "bg-accent text-[#13210f]"
+                    : "bg-white/4 text-muted hover:bg-white/8",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -101,11 +103,12 @@ export function DashboardShell({ session }: DashboardShellProps) {
             })}
           </nav>
 
-          <div className="mt-8 rounded-xl border border-border bg-card-strong p-5">
+          <div className="mt-8 p-3">
             <Badge>Marketplace score</Badge>
-            <p className="mt-4 text-4xl font-semibold">89</p>
+            <p className="mt-3 text-2xl font-semibold">89</p>
             <p className="mt-2 text-sm leading-6 text-muted">
-              Strong profile completeness, recent activity, and response quality.
+              Strong profile completeness, recent activity, and response
+              quality.
             </p>
           </div>
 
@@ -121,30 +124,32 @@ export function DashboardShell({ session }: DashboardShellProps) {
                   key={item.label}
                   type="button"
                   onClick={
-                    item.label === "Logout"
-                      ? async () => {
-                          if (isLoggingOut) {
-                            return;
-                          }
-
-                          setIsLoggingOut(true);
-
-                          try {
-                            await fetch(logoutUrl, {
-                              method: "POST",
-                              credentials: "include",
-                            });
-                          } finally {
-                            router.replace("/login");
-                            router.refresh();
-                          }
+                    item.label === "Logout" ?
+                      async () => {
+                        if (isLoggingOut) {
+                          return;
                         }
-                      : undefined
+
+                        setIsLoggingOut(true);
+
+                        try {
+                          await fetch(logoutUrl, {
+                            method: "POST",
+                            credentials: "include",
+                          });
+                        } finally {
+                          router.replace("/login");
+                          router.refresh();
+                        }
+                      }
+                    : undefined
                   }
                   className="flex items-center gap-3 rounded-[18px] px-3 py-3 text-sm text-muted hover:bg-white/6"
                 >
                   <Icon className="h-4 w-4" />
-                  {item.label === "Logout" && isLoggingOut ? "Logging out..." : item.label}
+                  {item.label === "Logout" && isLoggingOut ?
+                    "Logging out..."
+                  : item.label}
                 </button>
               );
             })}
@@ -152,7 +157,7 @@ export function DashboardShell({ session }: DashboardShellProps) {
         </aside>
 
         <div className="flex-1">
-          <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 md:px-6">
+          <div className="flex items-center justify-between px-2 py-3 border-b border-border md:px-6">
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -163,7 +168,9 @@ export function DashboardShell({ session }: DashboardShellProps) {
               </button>
               <div>
                 <p className="text-sm text-muted">Dashboard</p>
-                <h1 className="text-xl font-semibold md:text-2xl">WasteStream command center</h1>
+                <h1 className="text-xl font-semibold md:text-2xl">
+                  WasteStream command center
+                </h1>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -179,7 +186,7 @@ export function DashboardShell({ session }: DashboardShellProps) {
 
           <div className="mt-4 grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
             <div className="space-y-4">
-              <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <section className="p-6 md:p-8">
                 <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
                   <div>
                     <Badge>Operations overview</Badge>
@@ -187,7 +194,8 @@ export function DashboardShell({ session }: DashboardShellProps) {
                       Good afternoon, {session.user.name}
                     </h2>
                     <p className="mt-2 max-w-2xl text-sm leading-6 text-muted">
-                      Monitor active waste listings, recycler responses, and route-ready deals in one place.
+                      Monitor active waste listings, recycler responses, and
+                      route-ready deals in one place.
                     </p>
                   </div>
                   <Button variant="secondary" disabled>
@@ -197,26 +205,28 @@ export function DashboardShell({ session }: DashboardShellProps) {
                 </div>
                 <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                   {overviewStats.map(({ value, label, icon: Icon }) => (
-                    <div key={label} className="rounded-xl border border-border bg-card-strong p-5">
+                    <div key={label} className="p-5">
                       <Icon className="h-5 w-5 text-accent" />
-                      <p className="mt-5 text-3xl font-semibold">{value}</p>
-                      <p className="mt-2 text-sm text-muted">{label}</p>
+                      <p className="mt-3 text-2xl font-semibold">{value}</p>
+                      <p className="mt-1 text-sm text-muted">{label}</p>
                     </div>
                   ))}
                 </div>
               </section>
 
-              <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+              <section className="p-6 md:p-8">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted">Trade activity</p>
-                    <h3 className="mt-1 text-2xl font-semibold">Marketplace movement</h3>
+                    <h3 className="mt-1 text-2xl font-semibold">
+                      Marketplace movement
+                    </h3>
                   </div>
                   <Badge>Last 30 days</Badge>
                 </div>
                 <div className="mt-8 grid h-72 grid-cols-8 gap-3">
                   {[48, 66, 42, 81, 59, 90, 54, 72].map((height, index) => (
-                    <div key={index} className="flex items-end rounded-xl bg-card-strong p-2">
+                    <div key={index} className="flex items-end p-2">
                       <div
                         className="w-full rounded-full bg-linear-to-t from-accent via-[#e4ffca] to-white"
                         style={{ height: `${height}%` }}
@@ -228,26 +238,31 @@ export function DashboardShell({ session }: DashboardShellProps) {
             </div>
 
             <div className="space-y-4">
-              <section className="rounded-2xl border border-border bg-card p-6">
+              <section className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted">Account status</p>
-                    <p className="mt-1 text-2xl font-semibold">Profile verified</p>
+                    <p className="mt-1 text-2xl font-semibold">
+                      Profile verified
+                    </p>
                   </div>
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-accent">
                     <ShieldCheck className="h-5 w-5" />
                   </div>
                 </div>
                 <p className="mt-4 text-sm leading-6 text-muted">
-                  Your company details, materials, and route zones are complete. You are ready to trade.
+                  Your company details, materials, and route zones are complete.
+                  You are ready to trade.
                 </p>
               </section>
 
-              <section className="rounded-2xl border border-border bg-card p-6">
+              <section className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted">Top match</p>
-                    <p className="mt-1 text-2xl font-semibold">Lagos PET Recovery</p>
+                    <p className="mt-1 text-2xl font-semibold">
+                      Lagos PET Recovery
+                    </p>
                   </div>
                   <Badge>91% fit</Badge>
                 </div>
@@ -257,21 +272,24 @@ export function DashboardShell({ session }: DashboardShellProps) {
                     "Located within your preferred collection radius",
                     "Recent acceptance rate above marketplace average",
                   ].map((point) => (
-                    <div key={point} className="rounded-xl border border-border bg-card-strong px-4 py-3 text-sm text-muted">
+                    <div
+                      key={point}
+                      className="px-4 py-3 text-sm text-muted border-b border-border"
+                    >
                       {point}
                     </div>
                   ))}
                 </div>
               </section>
 
-              <section className="rounded-2xl border border-border bg-card p-6">
+              <section className="p-6">
                 <p className="text-sm text-muted">Quick actions</p>
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   {quickActions.map(({ label, icon: Icon }) => (
                     <button
                       key={label}
                       type="button"
-                      className="rounded-xl border border-border bg-card-strong p-4 text-left hover:bg-white/6"
+                      className="p-4 text-left hover:bg-white/6"
                     >
                       <Icon className="h-5 w-5 text-accent" />
                       <p className="mt-4 text-sm font-medium">{label}</p>

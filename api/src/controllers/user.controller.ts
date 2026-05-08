@@ -7,6 +7,7 @@ import {
   createOnboardingProfile,
   deleteOnboardingProfile,
   updateOnboardingProfile,
+  updatePersonalProfile,
   validateOnboardingInput,
 } from "../lib/user-profile";
 
@@ -90,3 +91,33 @@ export async function deleteCurrentUserController(req: Request, res: Response) {
 
   res.status(204).send();
 }
+
+export async function updatePersonalProfileController(req: Request, res: Response) {
+  const session = await requireSession(req, res);
+
+  if (!session) {
+    return;
+  }
+
+  const { fullName, country, phoneNumber, bio } = req.body;
+
+  if (fullName === undefined && country === undefined && phoneNumber === undefined && bio === undefined) {
+    res.status(400).json({ message: "No valid fields provided to update." });
+    return;
+  }
+
+  try {
+    await updatePersonalProfile(session.user.id, {
+      fullName,
+      country,
+      phoneNumber,
+      bio,
+    });
+    
+    res.status(200).json(await buildAuthProfile(session));
+  } catch (error) {
+    console.error("Failed to update personal profile", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+}
+
