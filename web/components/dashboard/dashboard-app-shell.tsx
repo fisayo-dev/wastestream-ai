@@ -26,14 +26,15 @@ type DashboardSessionContextValue = {
   session: BackendAuthProfile;
 };
 
-const DashboardSessionContext = createContext<DashboardSessionContextValue | null>(
-  null,
-);
+const DashboardSessionContext =
+  createContext<DashboardSessionContextValue | null>(null);
 
 export function useDashboardSession() {
   const value = useContext(DashboardSessionContext);
   if (!value) {
-    throw new Error("useDashboardSession must be used inside DashboardAppShell");
+    throw new Error(
+      "useDashboardSession must be used inside DashboardAppShell",
+    );
   }
 
   return value.session;
@@ -52,14 +53,19 @@ const navigation = [
   { label: "Profile", href: "/dashboard/profile", icon: User },
 ] as const;
 
-export function DashboardAppShell({ session, children }: DashboardAppShellProps) {
+export function DashboardAppShell({
+  session,
+  children,
+}: DashboardAppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const roleLabel =
-    session.personalProfile?.role === "recycler" ? "Recycler" : "Waste provider";
+    session.personalProfile?.role === "recycler" ?
+      "Recycler"
+    : "Waste provider";
   const userInitials = session.user.name
     .split(" ")
     .map((part) => part[0]?.toUpperCase() ?? "")
@@ -97,7 +103,7 @@ export function DashboardAppShell({ session, children }: DashboardAppShellProps)
         <div className="mx-auto flex max-w-7xl gap-4 lg:gap-6">
           <aside
             className={cn(
-              "fixed inset-y-4 left-4 z-40 flex w-[280px] flex-col rounded-2xl border border-border bg-card p-5 transition-transform lg:static lg:translate-x-0",
+              "fixed inset-y-4 left-4 z-40 flex w-[280px] flex-col p-2 transition-transform lg:static lg:translate-x-0",
               sidebarOpen ? "translate-x-0" : "translate-x-[-120%]",
             )}
           >
@@ -116,7 +122,8 @@ export function DashboardAppShell({ session, children }: DashboardAppShellProps)
               {navigation.map((item) => {
                 const Icon = item.icon;
                 const active =
-                  pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  pathname === item.href ||
+                  pathname.startsWith(`${item.href}/`);
 
                 return (
                   <Link
@@ -124,9 +131,9 @@ export function DashboardAppShell({ session, children }: DashboardAppShellProps)
                     href={item.href}
                     className={cn(
                       "flex items-center gap-3 rounded-[20px] px-4 py-3 text-sm",
-                      active
-                        ? "bg-accent text-[#13210f]"
-                        : "bg-white/4 text-muted hover:bg-white/8",
+                      active ?
+                        "bg-accent text-[#13210f]"
+                      : "bg-white/4 text-muted hover:bg-white/8",
                     )}
                     onClick={() => setSidebarOpen(false)}
                   >
@@ -137,9 +144,11 @@ export function DashboardAppShell({ session, children }: DashboardAppShellProps)
               })}
             </nav>
 
-            <div className="mt-8 rounded-xl border border-border bg-card-strong p-5">
+            <div className="mt-8 p-3">
               <Badge>{roleLabel} workspace</Badge>
-              <p className="mt-4 text-2xl font-semibold">Marketplace-ready profile</p>
+              <p className="mt-3 text-lg font-semibold">
+                Marketplace-ready profile
+              </p>
               <p className="mt-2 text-sm leading-6 text-muted">
                 Your onboarding details power listing visibility, compatibility
                 scoring, and pickup context.
@@ -161,7 +170,7 @@ export function DashboardAppShell({ session, children }: DashboardAppShellProps)
           </aside>
 
           <div className="flex-1 space-y-4">
-            <header className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 md:px-6">
+            <header className="flex items-center justify-between px-2 py-3 border-b border-border md:px-6">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
