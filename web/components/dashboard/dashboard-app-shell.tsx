@@ -103,7 +103,7 @@ export function DashboardAppShell({
         <div className="mx-auto flex max-w-7xl gap-4 lg:gap-6">
           <aside
             className={cn(
-              "fixed inset-y-4 left-4 z-40 flex w-[280px] flex-col p-2 transition-transform lg:static lg:translate-x-0",
+              "fixed inset-y-4 left-4 z-40 flex w-70 flex-col p-2 transition-transform lg:static lg:translate-x-0",
               sidebarOpen ? "translate-x-0" : "translate-x-[-120%]",
             )}
           >
@@ -122,8 +122,7 @@ export function DashboardAppShell({
               {navigation.map((item) => {
                 const Icon = item.icon;
                 const active =
-                  pathname === item.href ||
-                  pathname.startsWith(`${item.href}/`);
+                  pathname === item.href 
 
                 return (
                   <Link

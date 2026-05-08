@@ -61,13 +61,13 @@ export default function DashboardPage() {
                     </p>
                   </div>
 
-                  {listing.matchScore ? (
+                  {"matchScore" in listing && listing.matchScore ? (
                     <Badge className="bg-accent/10 text-accent">
                       {listing.matchScore}% Match
                     </Badge>
                   ) : null}
 
-                  {listing.status ? (
+                  {"status" in listing && listing.status ? (
                     <Badge className="capitalize">{listing.status}</Badge>
                   ) : null}
                 </div>

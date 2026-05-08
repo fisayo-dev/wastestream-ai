@@ -126,42 +126,36 @@ export const wasteType = pgTable(
   }),
 );
 
-export const recyclerProfile = pgTable(
-  "recycler_profile",
-  {
-    userId: text("user_id")
-      .primaryKey()
-      .references(() => user.id, { onDelete: "cascade" }),
-    collectionCapacityAmount: text("collection_capacity_amount").notNull(),
-    collectionCapacityUnit: text("collection_capacity_unit").notNull(),
-    pickupAvailability: text("pickup_availability").notNull(),
-    serviceCountry: text("service_country").notNull(),
-    serviceState: text("service_state").notNull(),
-    serviceCity: text("service_city").notNull(),
-    businessDescription: text("business_description"),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
-  },
-);
+export const recyclerProfile = pgTable("recycler_profile", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  collectionCapacityAmount: text("collection_capacity_amount").notNull(),
+  collectionCapacityUnit: text("collection_capacity_unit").notNull(),
+  pickupAvailability: text("pickup_availability").notNull(),
+  serviceCountry: text("service_country").notNull(),
+  serviceState: text("service_state").notNull(),
+  serviceCity: text("service_city").notNull(),
+  businessDescription: text("business_description"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
+});
 
-export const wasteProviderProfile = pgTable(
-  "waste_provider_profile",
-  {
-    userId: text("user_id")
-      .primaryKey()
-      .references(() => user.id, { onDelete: "cascade" }),
-    estimatedQuantityAmount: text("estimated_quantity_amount").notNull(),
-    estimatedQuantityUnit: text("estimated_quantity_unit").notNull(),
-    frequency: text("frequency").notNull(),
-    wasteCondition: text("waste_condition").notNull(),
-    country: text("country").notNull(),
-    state: text("state").notNull(),
-    city: text("city").notNull(),
-    additionalNotes: text("additional_notes"),
-    createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
-  },
-);
+export const wasteProviderProfile = pgTable("waste_provider_profile", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  estimatedQuantityAmount: text("estimated_quantity_amount").notNull(),
+  estimatedQuantityUnit: text("estimated_quantity_unit").notNull(),
+  frequency: text("frequency").notNull(),
+  wasteCondition: text("waste_condition").notNull(),
+  country: text("country").notNull(),
+  state: text("state").notNull(),
+  city: text("city").notNull(),
+  additionalNotes: text("additional_notes"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
+});
 
 export const recyclerWasteType = pgTable(
   "recycler_waste_type",

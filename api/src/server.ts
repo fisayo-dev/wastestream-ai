@@ -9,6 +9,7 @@ import { authBasePath, port } from "./constants/general";
 import { auth, frontendURL } from "./lib/auth";
 import userRouter from "./routes/user.router";
 import authRouter from "./routes/auth.router";
+import listingsRouter from "./routes/listings.router";
 
 config();
 
@@ -42,6 +43,9 @@ app.use("/v1/auth", authRouter);
 
 // User
 app.use("/v1/user", userRouter);
+
+// Listings
+app.use("/v1/listings", listingsRouter);
 
 // Start server
 async function bootstrap() {
