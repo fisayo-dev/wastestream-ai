@@ -108,7 +108,7 @@ npm run dev
 - `BETTER_AUTH_URL` — Base URL used by Better Auth (usually API public URL)
 - `PORT` — API port (default: `2300`)
 - `FRONTEND_URL` — Frontend URL for CORS/config (default: `http://localhost:2900`)
-- `NEXT_PUBLIC_BACKEND_URL` or `NEXT_BACKEND_PUBLIC_URL` — Frontend -> backend URL
+- `NEXT_PUBLIC_BACKEND_URL` or `NEXT_PUBLIC_BACKEND_PUBLIC_URL` — Frontend -> backend URL
 
 Check the code in [api/src/constants/general.ts](api/src/constants/general.ts#L1) and [web/proxy.ts](web/proxy.ts#L1) for places these values are read.
 

@@ -1,8 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const apiBaseUrl =
-  process.env.NEXT_BACKEND_PUBLIC_URL;
+const apiBaseUrl = process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL;
 
 const authProfileUrl = `${apiBaseUrl}/auth/profile`;
 
