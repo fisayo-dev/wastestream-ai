@@ -5,7 +5,7 @@ import { toNodeHandler } from "better-auth/node";
 
 import healthController from "./controllers/health.controller";
 import { ensureAuthSchema } from "./database/ensure-auth-schema";
-import { authBasePath, port } from "./constants/general";
+import { authBasePath, frontendURL, port } from "./constants/general";
 import { auth } from "./lib/auth";
 import userRouter from "./routes/user.router";
 import authRouter from "./routes/auth.router";
@@ -18,7 +18,7 @@ const app = express();
 // cors
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: frontendURL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"],
   }),

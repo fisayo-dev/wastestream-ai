@@ -11,7 +11,7 @@ const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const port = Number(process.env.PORT);
 const baseURL = process.env.BETTER_AUTH_URL;
-const frontendURL = process.env.FRONTEND_URL ?? "https://localhost:2900";
+const frontendURL = process.env.FRONTEND_URL!;
 
 if (!googleClientId || !googleClientSecret) {
   throw new Error("Google OAuth credentials are not configured");
