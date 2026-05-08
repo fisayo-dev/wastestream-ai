@@ -7,9 +7,15 @@ import { Check, Factory, LoaderCircle, Recycle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useBackendSession } from "@/hooks/use-backend-session";
 import { type BackendAuthProfile, userProfileUrl } from "@/lib/auth";
 import { cn } from "@/lib/utils";
@@ -114,16 +120,18 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
 
   function toggleWasteType(slug: string) {
     if (form.role === "recycler") {
-      const nextValues = form.recycler.wasteTypesAccepted.includes(slug)
-        ? form.recycler.wasteTypesAccepted.filter((item) => item !== slug)
+      const nextValues =
+        form.recycler.wasteTypesAccepted.includes(slug) ?
+          form.recycler.wasteTypesAccepted.filter((item) => item !== slug)
         : [...form.recycler.wasteTypesAccepted, slug];
 
       updateRecyclerField("wasteTypesAccepted", nextValues);
       return;
     }
 
-    const nextValues = form.wasteProvider.wasteTypesProvided.includes(slug)
-      ? form.wasteProvider.wasteTypesProvided.filter((item) => item !== slug)
+    const nextValues =
+      form.wasteProvider.wasteTypesProvided.includes(slug) ?
+        form.wasteProvider.wasteTypesProvided.filter((item) => item !== slug)
       : [...form.wasteProvider.wasteTypesProvided, slug];
 
     updateWasteProviderField("wasteTypesProvided", nextValues);
@@ -222,44 +230,44 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
     setSubmitError("");
 
     const payload =
-      form.role === "recycler"
-        ? {
-            fullName: form.fullName.trim(),
-            phoneNumber: form.phoneNumber.trim(),
-            bio: form.bio.trim(),
-            country: form.country.trim(),
-            role: "recycler",
-            recycler: {
-              wasteTypesAccepted: form.recycler.wasteTypesAccepted,
-              collectionCapacityAmount:
-                form.recycler.collectionCapacityAmount.trim(),
-              collectionCapacityUnit: form.recycler.collectionCapacityUnit,
-              pickupAvailability: form.recycler.pickupAvailability,
-              serviceCountry: form.recycler.serviceCountry.trim(),
-              serviceState: form.recycler.serviceState.trim(),
-              serviceCity: form.recycler.serviceCity.trim(),
-              businessDescription: form.recycler.businessDescription.trim(),
-            },
-          }
-        : {
-            fullName: form.fullName.trim(),
-            phoneNumber: form.phoneNumber.trim(),
-            bio: form.bio.trim(),
-            country: form.country.trim(),
-            role: "waste-provider",
-            wasteProvider: {
-              wasteTypesProvided: form.wasteProvider.wasteTypesProvided,
-              estimatedQuantityAmount:
-                form.wasteProvider.estimatedQuantityAmount.trim(),
-              estimatedQuantityUnit: form.wasteProvider.estimatedQuantityUnit,
-              frequency: form.wasteProvider.frequency,
-              wasteCondition: form.wasteProvider.wasteCondition,
-              country: form.wasteProvider.country.trim(),
-              state: form.wasteProvider.state.trim(),
-              city: form.wasteProvider.city.trim(),
-              additionalNotes: form.wasteProvider.additionalNotes.trim(),
-            },
-          };
+      form.role === "recycler" ?
+        {
+          fullName: form.fullName.trim(),
+          phoneNumber: form.phoneNumber.trim(),
+          bio: form.bio.trim(),
+          country: form.country.trim(),
+          role: "recycler",
+          recycler: {
+            wasteTypesAccepted: form.recycler.wasteTypesAccepted,
+            collectionCapacityAmount:
+              form.recycler.collectionCapacityAmount.trim(),
+            collectionCapacityUnit: form.recycler.collectionCapacityUnit,
+            pickupAvailability: form.recycler.pickupAvailability,
+            serviceCountry: form.recycler.serviceCountry.trim(),
+            serviceState: form.recycler.serviceState.trim(),
+            serviceCity: form.recycler.serviceCity.trim(),
+            businessDescription: form.recycler.businessDescription.trim(),
+          },
+        }
+      : {
+          fullName: form.fullName.trim(),
+          phoneNumber: form.phoneNumber.trim(),
+          bio: form.bio.trim(),
+          country: form.country.trim(),
+          role: "waste-provider",
+          wasteProvider: {
+            wasteTypesProvided: form.wasteProvider.wasteTypesProvided,
+            estimatedQuantityAmount:
+              form.wasteProvider.estimatedQuantityAmount.trim(),
+            estimatedQuantityUnit: form.wasteProvider.estimatedQuantityUnit,
+            frequency: form.wasteProvider.frequency,
+            wasteCondition: form.wasteProvider.wasteCondition,
+            country: form.wasteProvider.country.trim(),
+            state: form.wasteProvider.state.trim(),
+            city: form.wasteProvider.city.trim(),
+            additionalNotes: form.wasteProvider.additionalNotes.trim(),
+          },
+        };
 
     try {
       const response = await fetch(userProfileUrl, {
@@ -312,16 +320,17 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
               </div>
 
               <div className="flex items-center gap-3 bg-background/20 px-4 py-3">
-                {data.user.image ? (
+                {data.user.image ?
                   <Avatar>
                     <AvatarImage src={data.user.image} />
-                    <AvatarFallback>{data.user.name.split(" ")[0]}</AvatarFallback>
+                    <AvatarFallback>
+                      {data.user.name.split(" ")[0]}
+                    </AvatarFallback>
                   </Avatar>
-                ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full  bg-white/5 text-sm font-semibold">
+                : <div className="flex h-12 w-12 items-center justify-center rounded-full  bg-white/5 text-sm font-semibold">
                     {avatarInitials}
                   </div>
-                )}
+                }
                 <div>
                   <p className="text-sm font-medium">
                     {form.fullName || data.user.name}
@@ -350,21 +359,23 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     }}
                     className={cn(
                       "border rounded-2xl px-4 py-4 text-left",
-                      isActive
-                        ? "border-accent bg-accent/8"
-                        : "border-border bg-transparent hover:bg-white/4",
+                      isActive ?
+                        "border-accent bg-accent/8"
+                      : "border-border bg-transparent hover:bg-white/4",
                     )}
                   >
                     <div className="flex items-center gap-3">
                       <div
                         className={cn(
                           "flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-xs font-semibold",
-                          isComplete || isActive
-                            ? "border-accent bg-accent text-[#13210f]"
-                            : "border-border text-muted",
+                          isComplete || isActive ?
+                            "border-accent bg-accent text-[#13210f]"
+                          : "border-border text-muted",
                         )}
                       >
-                        {isComplete ? <Check className="h-4 w-4" /> : item.id}
+                        {isComplete ?
+                          <Check className="h-4 w-4" />
+                        : item.id}
                       </div>
                       <div>
                         <p className="text-sm font-medium">{item.title}</p>
@@ -392,7 +403,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
               </p>
             </div>
 
-            {step === 1 ? (
+            {step === 1 ?
               <div className="grid gap-5 md:grid-cols-2">
                 <Field label="Full name" error={errors.fullName}>
                   <Input
@@ -435,9 +446,9 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                   />
                 </Field>
               </div>
-            ) : null}
+            : null}
 
-            {step === 2 ? (
+            {step === 2 ?
               <div className="grid gap-4 md:grid-cols-2">
                 <RoleOption
                   title="Recycler"
@@ -464,10 +475,10 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                   }
                 />
               </div>
-            ) : null}
+            : null}
 
-            {step === 3 ? (
-              form.role === "recycler" ? (
+            {step === 3 ?
+              form.role === "recycler" ?
                 <div className="space-y-8">
                   <SectionTitle
                     title="Waste collection info"
@@ -507,20 +518,25 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     >
                       <Select
                         value={form.recycler.collectionCapacityUnit}
-                        onChange={(event) =>
+                        onValueChange={(value) =>
                           updateRecyclerField(
                             "collectionCapacityUnit",
-                            event.target.value,
+                            value ?? "",
                           )
                         }
-                        options={[
-                          { label: "Select unit", value: "" },
-                          ...data.meta.capacityUnitOptions.map((option) => ({
-                            label: option,
-                            value: option,
-                          })),
-                        ]}
-                      />
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">Select unit</SelectItem>
+                          {data.meta.capacityUnitOptions.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                   </div>
 
@@ -604,8 +620,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     />
                   </Field>
                 </div>
-              ) : (
-                <div className="space-y-8">
+              : <div className="space-y-8">
                   <SectionTitle
                     title="Waste details"
                     description="Keep this practical. The goal is enough signal to match you well."
@@ -644,20 +659,24 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     >
                       <Select
                         value={form.wasteProvider.estimatedQuantityUnit}
-                        onChange={(event) =>
+                        onValueChange={(value) =>
                           updateWasteProviderField(
                             "estimatedQuantityUnit",
-                            event.target.value,
+                            value ?? "",
                           )
                         }
-                        options={[
-                          { label: "Select unit", value: "" },
-                          ...data.meta.quantityUnitOptions.map((option) => ({
-                            label: option,
-                            value: option,
-                          })),
-                        ]}
-                      />
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {data.meta.quantityUnitOptions.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                   </div>
 
@@ -668,26 +687,25 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     >
                       <Select
                         value={form.wasteProvider.frequency}
-                        onChange={(event) =>
-                          updateWasteProviderField(
-                            "frequency",
-                            event.target.value,
-                          )
+                        onValueChange={(value) =>
+                          updateWasteProviderField("frequency", value ?? "")
                         }
-                        options={[
-                          { label: "Select frequency", value: "" },
-                          ...data.meta.providerFrequencyOptions.map(
-                            (option) => ({
-                              label: option
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select frequency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {data.meta.providerFrequencyOptions.map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option
                                 .replace("one-time", "One-time")
                                 .replace("daily", "Daily")
                                 .replace("weekly", "Weekly")
-                                .replace("monthly", "Monthly"),
-                              value: option,
-                            }),
-                          ),
-                        ]}
-                      />
+                                .replace("monthly", "Monthly")}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </Field>
                     <Field
                       label="Waste condition"
@@ -695,23 +713,25 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     >
                       <Select
                         value={form.wasteProvider.wasteCondition}
-                        onChange={(event) =>
+                        onValueChange={(value) =>
                           updateWasteProviderField(
                             "wasteCondition",
-                            event.target.value,
+                            value ?? "",
                           )
                         }
-                        options={[
-                          { label: "Select condition", value: "" },
-                          { label: "Sorted", value: "sorted" },
-                          { label: "Mixed", value: "mixed" },
-                          { label: "Clean", value: "clean" },
-                          {
-                            label: "Dirty/contaminated",
-                            value: "dirty-contaminated",
-                          },
-                        ]}
-                      />
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select condition" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="sorted">Sorted</SelectItem>
+                          <SelectItem value="mixed">Mixed</SelectItem>
+                          <SelectItem value="clean">Clean</SelectItem>
+                          <SelectItem value="dirty-contaminated">
+                            Dirty/contaminated
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </Field>
                   </div>
 
@@ -762,20 +782,19 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                     />
                   </Field>
                 </div>
-              )
-            ) : null}
+
+            : null}
           </section>
 
           <footer className="px-5 py-5 md:px-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div>
-                {submitError ? (
+                {submitError ?
                   <p className="text-sm text-danger">{submitError}</p>
-                ) : (
-                  <p className="text-sm text-muted">
+                : <p className="text-sm text-muted">
                     Its neccessary we onboard our users.
                   </p>
-                )}
+                }
               </div>
 
               <div className="flex gap-3">
@@ -788,26 +807,23 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                   Back
                 </Button>
 
-                {step < 3 ? (
+                {step < 3 ?
                   <Button type="button" onClick={handleNext}>
                     Continue
                   </Button>
-                ) : (
-                  <Button
+                : <Button
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSaving}
                   >
-                    {isSaving ? (
+                    {isSaving ?
                       <>
                         <LoaderCircle className="h-4 w-4 animate-spin" />
                         Saving
                       </>
-                    ) : (
-                      "Complete onboarding"
-                    )}
+                    : "Complete onboarding"}
                   </Button>
-                )}
+                }
               </div>
             </div>
           </footer>
@@ -830,12 +846,14 @@ function Field({ children, className, error, label, optional }: FieldProps) {
     <div className={cn("space-y-2", className)}>
       <Label className="flex items-center gap-2 text-sm">
         {label}
-        {optional ? (
+        {optional ?
           <span className="text-xs text-muted">(optional)</span>
-        ) : null}
+        : null}
       </Label>
       {children}
-      {error ? <p className="text-sm text-danger">{error}</p> : null}
+      {error ?
+        <p className="text-sm text-danger">{error}</p>
+      : null}
     </div>
   );
 }
@@ -916,13 +934,15 @@ function WasteTypeGrid({
             onClick={() => onToggle(option.slug)}
             className={cn(
               "flex items-center justify-between border rounded-2xl px-4 py-3 text-left text-sm",
-              active
-                ? "border-accent bg-accent/8 text-foreground"
-                : "border-border hover:bg-white/4",
+              active ?
+                "border-accent bg-accent/8 text-foreground"
+              : "border-border hover:bg-white/4",
             )}
           >
             <span>{option.label}</span>
-            {active ? <Check className="h-4 w-4 text-accent" /> : null}
+            {active ?
+              <Check className="h-4 w-4 text-accent" />
+            : null}
           </button>
         );
       })}
