@@ -5,10 +5,10 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { useBackendSession } from "@/hooks/use-backend-session";
-import type { BackendSession } from "@/lib/auth";
+import type { BackendAuthProfile } from "@/lib/auth";
 
 type ProtectedShellProps = {
-  children: (session: BackendSession) => ReactNode;
+  children: (session: BackendAuthProfile) => ReactNode;
 };
 
 export function ProtectedShell({ children }: ProtectedShellProps) {
@@ -18,6 +18,11 @@ export function ProtectedShell({ children }: ProtectedShellProps) {
   useEffect(() => {
     if (!isLoading && !data) {
       router.replace("/login");
+      return;
+    }
+
+    if (!isLoading && data && !data.onboardingCompleted) {
+      router.replace("/onboarding");
     }
   }, [data, isLoading, router]);
 

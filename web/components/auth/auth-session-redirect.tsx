@@ -11,7 +11,7 @@ export function AuthSessionRedirect() {
 
   useEffect(() => {
     if (!isLoading && data) {
-      router.replace("/dashboard");
+      router.replace(data.onboardingCompleted ? "/dashboard" : "/onboarding");
     }
   }, [data, isLoading, router]);
 

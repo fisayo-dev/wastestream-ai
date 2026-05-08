@@ -1,6 +1,4 @@
 "use client";
-
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -25,7 +23,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/site/logo";
-import type { BackendSession } from "@/lib/auth";
+import type { BackendAuthProfile } from "@/lib/auth";
 import { logoutUrl } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 
@@ -52,7 +50,7 @@ const quickActions = [
 ];
 
 type DashboardShellProps = {
-  session: BackendSession;
+  session: BackendAuthProfile;
 };
 
 export function DashboardShell({ session }: DashboardShellProps) {
@@ -192,12 +190,10 @@ export function DashboardShell({ session }: DashboardShellProps) {
                       Monitor active waste listings, recycler responses, and route-ready deals in one place.
                     </p>
                   </div>
-                  <Link href="/onboarding">
-                    <Button variant="secondary">
-                      Edit onboarding
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
+                  <Button variant="secondary" disabled>
+                    Profile live
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
                 </div>
                 <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                   {overviewStats.map(({ value, label, icon: Icon }) => (

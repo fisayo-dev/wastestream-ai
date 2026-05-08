@@ -1,19 +1,27 @@
 import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "@better-auth/drizzle-adapter";
+import { config } from "dotenv";
 
-import { pool } from "./database/index.js";
+import { db } from "../database/index";
+import * as schema from "../database/schema";
+
+config();
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const port = Number(process.env.PORT ?? 2300);
-const baseURL = process.env.BETTER_AUTH_URL ?? `http://localhost:${port}`;
-const frontendURL = process.env.FRONTEND_URL ?? "http://localhost:2900";
+const port = Number(process.env.PORT);
+const baseURL = process.env.BETTER_AUTH_URL;
+const frontendURL = process.env.FRONTEND_URL ?? "https://localhost:2900";
 
 if (!googleClientId || !googleClientSecret) {
   throw new Error("Google OAuth credentials are not configured");
 }
 
 export const auth = betterAuth({
-  database: pool,
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema,
+  }),
   baseURL,
   trustedOrigins: [frontendURL],
   socialProviders: {
