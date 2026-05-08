@@ -100,10 +100,10 @@ export function DashboardAppShell({
   return (
     <DashboardSessionContext.Provider value={{ session }}>
       <main className="min-h-screen p-4 md:p-6">
-        <div className="mx-auto flex max-w-7xl gap-4 lg:gap-6">
+        <div className="mx-auto flex max-w-7xl gap-4 lg:gap-6 relative">
           <aside
             className={cn(
-              "fixed inset-y-4 left-4 z-40 flex w-70 flex-col p-2 transition-transform lg:static lg:translate-x-0",
+              "h-100 fixed inset-y-4 left-4 z-40 flex w-70 flex-col p-2 transition-transform lg:static lg:translate-x-0",
               sidebarOpen ? "translate-x-0" : "translate-x-[-120%]",
             )}
           >
@@ -145,13 +145,6 @@ export function DashboardAppShell({
 
             <div className="mt-8 p-3">
               <Badge>{roleLabel} workspace</Badge>
-              <p className="mt-3 text-lg font-semibold">
-                Marketplace-ready profile
-              </p>
-              <p className="mt-2 text-sm leading-6 text-muted">
-                Your onboarding details power listing visibility, compatibility
-                scoring, and pickup context.
-              </p>
             </div>
 
             <div className="mt-auto flex flex-col gap-3 pt-8">
@@ -169,34 +162,6 @@ export function DashboardAppShell({
           </aside>
 
           <div className="flex-1 space-y-4">
-            <header className="flex items-center justify-between px-2 py-3 border-b border-border md:px-6">
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setSidebarOpen(true)}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white/6 lg:hidden"
-                >
-                  <Menu className="h-5 w-5" />
-                </button>
-                <div>
-                  <p className="text-sm text-muted">Command center</p>
-                  <h1 className="text-xl font-semibold md:text-2xl">
-                    {currentLabel}
-                  </h1>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-white/6"
-                >
-                  <Bell className="h-4 w-4" />
-                </button>
-                <Avatar>{userInitials}</Avatar>
-              </div>
-            </header>
-
             <div>{children}</div>
           </div>
         </div>
