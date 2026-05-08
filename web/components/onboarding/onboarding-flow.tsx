@@ -397,7 +397,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       }
                     }}
                     className={cn(
-                      "border rounded-2xl px-4 py-4 text-left",
+                      "border rounded-2xl px-4 py-4 text-left cursor-pointer",
                       isActive ?
                         "border-accent bg-accent/8"
                       : "border-border bg-transparent hover:bg-white/4",
@@ -728,7 +728,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                         onValueChange={(value) =>
                           updateWasteProviderField("frequency", value ?? "")
                         }
-                      >
+                        >
                         <SelectTrigger>
                           <SelectValue placeholder="Select frequency" />
                         </SelectTrigger>
