@@ -11,15 +11,19 @@ const authRouter = Router();
 
 authRouter.get("/google", (req, res) => {
   const callbackURL =
-    typeof req.query.callbackURL === "string" &&
-    req.query.callbackURL.length > 0
-      ? req.query.callbackURL
-      : `${frontendURL}/dashboard`;
+    (
+      typeof req.query.callbackURL === "string" &&
+      req.query.callbackURL.length > 0
+    ) ?
+      req.query.callbackURL
+    : `${frontendURL}/dashboard`;
 
-  const signInURL = new URL(
-    `${authBasePath}/sign-in/social`,
-    `http://localhost:${port}`,
-  );
+  const backendURL =
+    process.env.NODE_ENV === "production" ?
+      process.env.BETTER_AUTH_URL
+    : `http://localhost:${port}`;
+
+  const signInURL = new URL(`${authBasePath}/sign-in/social`, backendURL);
   signInURL.searchParams.set("provider", "google");
   signInURL.searchParams.set("callbackURL", callbackURL);
 
