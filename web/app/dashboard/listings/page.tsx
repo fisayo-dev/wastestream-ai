@@ -76,7 +76,7 @@ export default function ListingsPage() {
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2">
         {listings.map((listing) => (
           <Card key={listing.id} className="border border-border bg-card">
             <CardContent className="pt-6">

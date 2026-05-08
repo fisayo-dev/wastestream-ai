@@ -22,7 +22,7 @@ export default function MatchesPage() {
         </CardHeader>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 ">
         {matches.map((match) => (
           <Card key={match.id} className="border border-border bg-card">
             <CardContent className="pt-6">
@@ -42,7 +42,7 @@ export default function MatchesPage() {
                 ))}
               </div>
 
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex  gap-2">
                 <Button variant="secondary" className="w-full">
                   View profile
                 </Button>
