@@ -22,6 +22,7 @@ async function getAuthState(request: NextRequest) {
       headers: {
         cookie,
       },
+      credentials: "include",
       cache: "no-store",
     });
 
@@ -51,7 +52,8 @@ function isOnboardingRoute(pathname: string) {
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const isProtectedRoute = isDashboardRoute(pathname) || isOnboardingRoute(pathname);
+  const isProtectedRoute =
+    isDashboardRoute(pathname) || isOnboardingRoute(pathname);
   const isAuthRoute = authRoutes.has(pathname);
 
   if (!isProtectedRoute && !isAuthRoute) {
@@ -70,7 +72,10 @@ export async function proxy(request: NextRequest) {
 
   if (isAuthRoute) {
     return NextResponse.redirect(
-      new URL(authState.onboardingCompleted ? "/dashboard" : "/onboarding", request.url),
+      new URL(
+        authState.onboardingCompleted ? "/dashboard" : "/onboarding",
+        request.url,
+      ),
     );
   }
 
@@ -86,5 +91,11 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/signup", "/dashboard/:path*", "/onboarding/:path*", "/onboard/:path*"],
+  matcher: [
+    "/login",
+    "/signup",
+    "/dashboard/:path*",
+    "/onboarding/:path*",
+    "/onboard/:path*",
+  ],
 };
