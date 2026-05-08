@@ -435,6 +435,43 @@ export async function updateOnboardingProfile(
   return saveOnboardingProfile(session, input);
 }
 
+export async function updatePersonalProfile(
+  userId: string,
+  input: {
+    fullName?: string;
+    country?: string;
+    phoneNumber?: string;
+    bio?: string | null;
+  }
+) {
+  const now = new Date();
+
+  await db.transaction(async (tx) => {
+    if (input.fullName) {
+      await tx
+        .update(user)
+        .set({
+          name: input.fullName,
+          updatedAt: now,
+        })
+        .where(eq(user.id, userId));
+    }
+
+    const updateData: any = { updatedAt: now };
+    if (input.fullName !== undefined) updateData.fullName = input.fullName;
+    if (input.country !== undefined) updateData.country = input.country;
+    if (input.phoneNumber !== undefined) updateData.phoneNumber = input.phoneNumber;
+    if (input.bio !== undefined) updateData.bio = input.bio;
+
+    if (Object.keys(updateData).length > 1) {
+      await tx
+        .update(userProfile)
+        .set(updateData)
+        .where(eq(userProfile.userId, userId));
+    }
+  });
+}
+
 async function saveOnboardingProfile(session: AuthSession, input: OnboardingInput) {
   const now = new Date();
   const wasteTypeMap = await getWasteTypeMap();

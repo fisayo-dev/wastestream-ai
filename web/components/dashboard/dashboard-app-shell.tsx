@@ -43,6 +43,8 @@ export function useDashboardSession() {
 type DashboardAppShellProps = {
   session: BackendAuthProfile;
   children: React.ReactNode;
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
 };
 
 const navigation = [
@@ -56,21 +58,22 @@ const navigation = [
 export function DashboardAppShell({
   session,
   children,
+  sidebarOpen,
+  setSidebarOpen,
 }: DashboardAppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const roleLabel =
     session.personalProfile?.role === "recycler" ?
       "Recycler"
     : "Waste provider";
-  const userInitials = session.user.name
-    .split(" ")
-    .map((part) => part[0]?.toUpperCase() ?? "")
-    .join("")
-    .slice(0, 2);
+  // const userInitials = session.user.name
+  //   .split(" ")
+  //   .map((part) => part[0]?.toUpperCase() ?? "")
+  //   .join("")
+  //   .slice(0, 2);
 
   const currentLabel = useMemo(() => {
     const activeItem = navigation.find(
@@ -99,12 +102,12 @@ export function DashboardAppShell({
 
   return (
     <DashboardSessionContext.Provider value={{ session }}>
-      <main className="min-h-screen p-4 md:p-6">
+      <div className="min-h-screen p-4 md:p-6 lg:p-8">
         <div className="mx-auto flex max-w-7xl gap-4 lg:gap-6 relative">
           <aside
             className={cn(
-              "h-100 fixed inset-y-4 left-4 z-40 flex w-70 flex-col p-2 transition-transform lg:static lg:translate-x-0",
-              sidebarOpen ? "translate-x-0" : "translate-x-[-120%]",
+              "fixed inset-y-4 left-4 z-40 flex h-[calc(100vh-2rem)] w-72 flex-col overflow-hidden rounded-2xl bg-card lg:bg-transparent p-2 transition-transform lg:sticky lg:top-4 lg:translate-x-0 border border-border lg:border-none",
+              sidebarOpen ? "translate-x-0 shadow-xl" : "translate-x-[-120%]",
             )}
           >
             <div className="flex items-center justify-between">
@@ -165,7 +168,7 @@ export function DashboardAppShell({
             <div>{children}</div>
           </div>
         </div>
-      </main>
+      </div>
     </DashboardSessionContext.Provider>
   );
 }
