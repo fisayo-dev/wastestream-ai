@@ -32,6 +32,7 @@ WasteStream AI is a full-stack hackathon project (Lablab AI × AMD Developer Clo
 
 - Frontend: Next.js (React) + TypeScript
 - Backend: Express + TypeScript
+- AI Agents: LangGrpah.
 - Database: PostgreSQL + Drizzle ORM
 - Auth: Better Auth (Google OAuth)
 

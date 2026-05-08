@@ -200,3 +200,30 @@ export const wasteProviderWasteType = pgTable(
     }),
   }),
 );
+
+export const listing = pgTable(
+  "listing",
+  {
+    id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+    title: text("title").notNull(),
+    description: text("description"),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    wasteTypeId: integer("waste_type_id").references(() => wasteType.id, {
+      onDelete: "set null",
+    }),
+    quantity: text("quantity"),
+    quantityUnit: text("quantity_unit"),
+    condition: text("condition"),
+    country: text("country"),
+    state: text("state"),
+    city: text("city"),
+    status: text("status").notNull().default("active"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
+  },
+  (table) => ({
+    userIdIdx: index("listing_user_id_idx").on(table.userId),
+  }),
+);
