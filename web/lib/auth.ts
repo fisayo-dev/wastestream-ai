@@ -1,9 +1,10 @@
 import { WasteTypeOption } from "@/types/waste";
 
 export const apiBaseUrl =
-  process.env.NEXT_BACKEND_PUBLIC_URL ?? "http://localhost:2300/v1";
+  process.env.NEXT_BACKEND_PUBLIC_URL;
 
-export const authBaseUrl =`${apiBaseUrl}/api/auth`;
+export const authBaseUrl =
+  process.env.NEXT_BACKEND_AUTH_PUBLIC_URL;
 
 export const googleAuthUrl = `${authBaseUrl}/sign-in/social`;
 export const sessionUrl = `${apiBaseUrl}/auth/session`;
