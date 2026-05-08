@@ -758,7 +758,7 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                         )
                       }
                       placeholder="Mostly plastic bottles from a restaurant."
-                      className="min-h-28 rounded-none"
+                      className="min-h-28 resize-none"
                     />
                   </Field>
                 </div>
