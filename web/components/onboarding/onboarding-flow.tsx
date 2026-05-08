@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, Factory, LoaderCircle, Recycle } from "lucide-react";
 
@@ -14,6 +14,13 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandItem,
+} from "@/components/ui/command";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useBackendSession } from "@/hooks/use-backend-session";
@@ -54,6 +61,38 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [countries, setCountries] = useState<string[]>([]);
+  const [loadingCountries, setLoadingCountries] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function load() {
+      try {
+        const res = await fetch(
+          "https://restcountries.com/v3.1/all?fields=name",
+        );
+        if (!res.ok) throw new Error("Failed to fetch countries");
+        const data: Array<{ name?: { common?: string } }> = await res.json();
+        const names = data
+          .map((c) => c?.name?.common ?? "")
+          .filter(Boolean)
+          .sort((a, b) => a.localeCompare(b));
+        if (mounted) {
+          setCountries(names);
+        }
+      } catch {
+        // swallow - keep countries empty
+      } finally {
+        if (mounted) setLoadingCountries(false);
+      }
+    }
+
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const wasteTypes =
     data.wasteTypes.length > 0 ? data.wasteTypes : fallbackWasteTypes;
@@ -427,12 +466,12 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                   />
                 </Field>
                 <Field label="Country" error={errors.country}>
-                  <Input
+                  <CountryCommand
                     value={form.country}
-                    onChange={(event) =>
-                      updatePersonalField("country", event.target.value)
-                    }
-                    placeholder="Nigeria"
+                    onChange={(v) => updatePersonalField("country", v)}
+                    countries={countries}
+                    loading={loadingCountries}
+                    placeholder="Select country"
                   />
                 </Field>
                 <Field label="Bio" optional className="md:col-span-2">
@@ -572,15 +611,14 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                       label="Service country"
                       error={errors.recyclerServiceCountry}
                     >
-                      <Input
+                      <CountryCommand
                         value={form.recycler.serviceCountry}
-                        onChange={(event) =>
-                          updateRecyclerField(
-                            "serviceCountry",
-                            event.target.value,
-                          )
+                        onChange={(v) =>
+                          updateRecyclerField("serviceCountry", v)
                         }
-                        placeholder="Nigeria"
+                        countries={countries}
+                        loading={loadingCountries}
+                        placeholder="Select country"
                       />
                     </Field>
                     <Field label="State" error={errors.recyclerServiceState}>
@@ -737,15 +775,12 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
 
                   <div className="grid gap-5 md:grid-cols-3">
                     <Field label="Country" error={errors.wasteProviderCountry}>
-                      <Input
+                      <CountryCommand
                         value={form.wasteProvider.country}
-                        onChange={(event) =>
-                          updateWasteProviderField(
-                            "country",
-                            event.target.value,
-                          )
-                        }
-                        placeholder="Nigeria"
+                        onChange={(v) => updateWasteProviderField("country", v)}
+                        countries={countries}
+                        loading={loadingCountries}
+                        placeholder="Select country"
                       />
                     </Field>
                     <Field label="State" error={errors.wasteProviderState}>
@@ -970,5 +1005,68 @@ function ChoicePill({
     >
       {label}
     </button>
+  );
+}
+
+function CountryCommand({
+  value,
+  onChange,
+  countries,
+  loading,
+  placeholder,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  countries: string[];
+  loading: boolean;
+  placeholder?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const items =
+    query ?
+      countries.filter((c) => c.toLowerCase().includes(query.toLowerCase()))
+    : countries;
+
+  return (
+    <div>
+      <Command>
+        <CommandInput
+          value={open ? query : value}
+          onFocus={() => setOpen(true)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
+          onBlur={() => setTimeout(() => setOpen(false), 150)}
+          placeholder={
+            loading ? "Loading countries..." : (placeholder ?? "Select country")
+          }
+        />
+
+        {open ?
+          <CommandList>
+            {items.length === 0 ?
+              <CommandEmpty>No countries found.</CommandEmpty>
+            : items.map((c) => (
+                <CommandItem
+                  key={c}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    onChange(c);
+                    setQuery("");
+                    setOpen(false);
+                  }}
+                  active={c === value}
+                >
+                  {c}
+                </CommandItem>
+              ))
+            }
+          </CommandList>
+        : null}
+      </Command>
+    </div>
   );
 }
