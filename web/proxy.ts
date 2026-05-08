@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const apiBaseUrl =
-  process.env.NEXT_BACKEND_PUBLIC_URL ?? "http://localhost:2300/v1";
+  process.env.NEXT_BACKEND_PUBLIC_URL;
 
 const authProfileUrl = `${apiBaseUrl}/auth/profile`;
 
