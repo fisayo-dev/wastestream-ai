@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Link from "next/link";
 
 export default function ListingsPage() {
   const listings = getMarketplaceListings();
@@ -26,14 +27,16 @@ export default function ListingsPage() {
               <p className="text-sm text-muted">Marketplace</p>
               <CardTitle className="text-2xl">Listings</CardTitle>
             </div>
-            <Button>
-              <Plus className="h-4 w-4" />
-              Create listing
-            </Button>
+            <Link href="/dashboard/listings/create">
+              <Button>
+                <Plus className="h-4 w-4" />
+                Create listing
+              </Button>
+            </Link>
           </div>
           <p className="text-sm text-muted">
-            Browse available waste streams and act quickly with view, contact, or
-            express interest.
+            Browse available waste streams and act quickly with view, contact,
+            or express interest.
           </p>
         </CardHeader>
       </Card>
@@ -43,7 +46,10 @@ export default function ListingsPage() {
           <div className="grid gap-3 md:grid-cols-[1fr_200px_200px]">
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-              <Input placeholder="Search by waste type or location" className="pl-9" />
+              <Input
+                placeholder="Search by waste type or location"
+                className="pl-9"
+              />
             </div>
             <Select defaultValue="all">
               <SelectTrigger>
@@ -84,16 +90,18 @@ export default function ListingsPage() {
               <div className="mt-4 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-lg font-semibold">{listing.wasteType}</p>
-                  {listing.matchScore ? (
+                  {listing.matchScore ?
                     <Badge className="bg-accent/10 text-accent">
                       {listing.matchScore}% Match
                     </Badge>
-                  ) : null}
+                  : null}
                 </div>
                 <p className="text-sm text-muted">
                   {listing.quantity} • {listing.location}
                 </p>
-                <p className="text-sm text-muted">Condition: {listing.condition}</p>
+                <p className="text-sm text-muted">
+                  Condition: {listing.condition}
+                </p>
                 <p className="text-xs text-muted">{listing.date}</p>
               </div>
 
