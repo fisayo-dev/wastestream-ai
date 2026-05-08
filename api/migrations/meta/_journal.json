@@ -15,6 +15,13 @@
       "when": 1778174551467,
       "tag": "0001_jittery_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778262490780,
+      "tag": "0002_outstanding_roulette",
+      "breakpoints": true
     }
   ]
 }
