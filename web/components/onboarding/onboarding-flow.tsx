@@ -362,8 +362,8 @@ function OnboardingEditor({ data }: { data: BackendAuthProfile }) {
                 {data.user.image ?
                   <Avatar>
                     <AvatarImage src={data.user.image} />
-                    <AvatarFallback>
-                      {data.user.name.split(" ")[0]}
+                    <AvatarFallback className="bg-white/5 text-sm font-semibold">
+                      {data.user.name.split(" ")[0][0]}
                     </AvatarFallback>
                   </Avatar>
                 : <div className="flex h-12 w-12 items-center justify-center rounded-full  bg-white/5 text-sm font-semibold">
