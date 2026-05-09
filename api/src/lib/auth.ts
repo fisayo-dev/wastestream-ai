@@ -33,6 +33,17 @@ export const auth = betterAuth({
   },
   advanced: {
     useSecureCookies: true,
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+  },
+  cookies: {
+    sessionToken: {
+      attributes: {
+        secure: true,
+        sameSite: "none",
+      },
+    },
   },
 });
 
