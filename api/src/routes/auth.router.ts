@@ -1,4 +1,5 @@
 import { Router } from "express";
+import {config} from 'dotenv'
 import { frontendURL } from "../lib/auth";
 import { authBasePath, port } from "../constants/general";
 import {
@@ -6,6 +7,8 @@ import {
   getSessionController,
   logoutController,
 } from "../controllers/auth.controller";
+
+config()
 
 const authRouter = Router();
 
