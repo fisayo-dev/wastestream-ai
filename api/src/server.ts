@@ -14,6 +14,7 @@ import listingsRouter from "./routes/listings.router";
 config();
 
 const app = express();
+app.set("trust proxy", 1);
 
 // cors
 app.use(

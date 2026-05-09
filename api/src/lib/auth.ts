@@ -31,6 +31,9 @@ export const auth = betterAuth({
       prompt: "select_account",
     },
   },
+  advanced: {
+    useSecureCookies: true,
+  },
 });
 
 export { frontendURL };
